@@ -43,7 +43,8 @@ public final class GameServer {
     * <p>This method handles all incoming game commands and carries out the corresponding actions.
     */
     public String handleCommand(String command) {
-        // TODO implement your server logic here
+        GameCommand gc = new GameCommand(command);
+        gc.handleCommand();
         return "";
     }
 
