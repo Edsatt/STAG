@@ -9,9 +9,10 @@ import java.nio.file.Paths;
 public final class GameServer {
 
     private static final char END_OF_TRANSMISSION = 4;
-    public static Locations gameLocations;
+    public static Map map;
 
     public static void main(String[] args) throws IOException {
+        map = new Map();
         File entitiesFile = Paths.get("config" + File.separator + "basic-entities.dot").toAbsolutePath().toFile();
         File actionsFile = Paths.get("config" + File.separator + "basic-actions.xml").toAbsolutePath().toFile();
         GameServer server = new GameServer(entitiesFile, actionsFile);
@@ -29,9 +30,8 @@ public final class GameServer {
     *
     */
     public GameServer(File entitiesFile, File actionsFile){
-        EntityParser entityParser = new EntityParser(entitiesFile);
+        EntityParser entityParser = new EntityParser(map, entitiesFile);
         entityParser.parse();
-        gameLocations = new Locations();
         entityParser.createLocations();
     }
 

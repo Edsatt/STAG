@@ -57,9 +57,9 @@ digraph layout {
     }
 
     subgraph paths {
-        cabin -> forest;
-        forest -> cabin;
-        cellar -> cabin;
+    cabin -> forest;
+    forest -> cabin;
+    cellar -> cabin;
     }
 
 }

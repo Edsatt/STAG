@@ -2,16 +2,15 @@ package edu.uob;
 
 import java.util.HashMap;
 
-public class Locations {
+public class Map {
     HashMap<String, Location> locations;
 
-    public Locations(){
+    public Map(){
         this.locations = new HashMap<>();
     }
 
-    public void addLocation(String id){
-        Location newLocation = new Location(id);
-        locations.put(id, newLocation);
+    public void addLocation(String id, Location location){
+        locations.put(id, location);
     }
 
     public Location getLocation(String id){
