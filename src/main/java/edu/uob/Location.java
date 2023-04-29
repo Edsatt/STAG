@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 public class Location {
+    private boolean startLocation;
+    private boolean storeroom;
     private final String id;
     private String description;
     private final HashMap<String, NonPlayerCharacter> characters;
@@ -16,6 +18,16 @@ public class Location {
         this.artefacts = new HashMap<>();
         this.furniture = new HashMap<>();
         this.paths = new HashSet<>();
+        this.startLocation = false;
+        this.storeroom = false;
+    }
+
+    public void setStartLocation(boolean isStart){
+        this.startLocation = isStart;
+    }
+
+    public void setStoreroom(boolean storeroom) {
+        this.storeroom = storeroom;
     }
 
     public void setDescription(String description){
@@ -45,6 +57,18 @@ public class Location {
 
     public void addPath(String path){
         paths.add(path);
+    }
+
+    public String getId(){
+        return id;
+    }
+
+    public boolean isStartLocation() {
+        return startLocation;
+    }
+
+    public boolean isStoreroom() {
+        return storeroom;
     }
 
     public String getDescription() {

@@ -1,15 +1,21 @@
 package edu.uob;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 public class Map {
     private PlayerCharacter currentPlayer;
-    private final HashMap<String, Location> locations;
+    private Location currentLocation;
+    private final LinkedHashMap<String, Location> locations;
     private final HashMap<String, PlayerCharacter> players;
 
     public Map(){
-        this.locations = new HashMap<>();
+        this.locations = new LinkedHashMap<>();
         this.players = new HashMap<>();
+    }
+
+    public void setCurrentLocation(Location location){
+        currentLocation = location;
     }
 
     public void addPlayer(String username){
@@ -33,6 +39,10 @@ public class Map {
         return players.get(username);
     }
 
+    public Location getCurrentLocation(){
+        return currentLocation;
+    }
+
     public Location getLocation(String id){
         return locations.get(id);
     }
@@ -41,7 +51,7 @@ public class Map {
         return players;
     }
 
-    public HashMap<String, Location> getLocations() {
+    public LinkedHashMap<String, Location> getLocations() {
         return locations;
     }
 }

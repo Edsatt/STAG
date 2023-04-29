@@ -1,5 +1,6 @@
 package edu.uob;
 
+import com.sun.source.tree.AssertTree;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -13,14 +14,39 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class GameCommandTests {
 
     GameCommand command;
-    Map map = new Map();
+    Map map;
+    PlayerCharacter player;
+    @BeforeEach
+    void setup(){
+        map = new Map();
+        map.addPlayer("ed");
+        player = map.getCurrentPlayer();
+    }
     @Test
-    void testInventory(){
+    void testInventoryToken(){
         command = new GameCommand("inventory inv INVENTORY INV Inventory Inv");
         command.handleCommand(map);
         for (Token token: command.commandTokens) {
             assertEquals(token.getTokenType(), TokenType.INVENTORY);
         }
+    }
+
+    @Test
+    void testInventoryCommand(){
+        command = new GameCommand("Inventory");
+        assertTrue(player.getInventory().isEmpty());
+        assertEquals(command.handleCommand(map), "Your inventory is empty");
+        Artefact key = new Artefact();
+        key.setDescription("A key");
+        Artefact axe = new Artefact();
+        axe.setDescription("A shiny axe");
+        player.addItemToInventory("key", key);
+        player.addItemToInventory("axe", axe);
+        assertEquals(player.getInventory().size(), 2);
+        command = new GameCommand("Inventory");
+        String response2 = command.handleCommand(map);
+        assertTrue(response2.contains("A key"));
+        assertTrue(response2.contains("A shiny axe"));
     }
 
     @Test

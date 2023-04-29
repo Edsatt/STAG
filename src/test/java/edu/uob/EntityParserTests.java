@@ -43,6 +43,8 @@ class EntityParserTests {
         assertTrue(cellar.getCharacters().containsKey("elf"));
         assertEquals(cellar.getCharacters().get("elf").getDescription(), "Angry Elf");
         assertTrue(cellar.getPaths().contains("cabin"));
+        assertFalse(cellar.isStartLocation());
+        assertFalse(cellar.isStoreroom());
 
         Location cabin = locations.get("cabin");
         assertEquals(cabin.getDescription(), "A log cabin in the woods");
@@ -54,6 +56,8 @@ class EntityParserTests {
         assertTrue(cabin.getFurniture().containsKey("trapdoor"));
         assertEquals(cabin.getFurniture().get("trapdoor").getDescription(), "Wooden trapdoor");
         assertTrue(cabin.getPaths().contains("forest"));
+        assertTrue(cabin.isStartLocation());
+        assertFalse(cabin.isStoreroom());
 
         Location forest = locations.get("forest");
         assertEquals(forest.getDescription(), "A dark forest");
@@ -63,6 +67,8 @@ class EntityParserTests {
         assertTrue(forest.getFurniture().containsKey("tree"));
         assertEquals(forest.getFurniture().get("tree").getDescription(), "A big tree");
         assertTrue(forest.getPaths().contains("cabin"));
+        assertFalse(forest.isStartLocation());
+        assertFalse(forest.isStoreroom());
 
         Location storeroom = locations.get("storeroom");
         assertEquals(storeroom.getDescription(), "Storage for any entities not placed in the game");
@@ -71,5 +77,7 @@ class EntityParserTests {
         assertTrue(storeroom.getArtefacts().containsKey("log"));
         assertEquals(storeroom.getArtefacts().get("log").getDescription(), "A heavy wooden log");
         assertTrue(storeroom.getPaths().isEmpty());
+        assertFalse(storeroom.isStartLocation());
+        assertTrue(storeroom.isStoreroom());
     }
 }

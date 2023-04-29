@@ -51,6 +51,10 @@ public final class GameServer {
         return gc.handleCommand(map);
     }
 
+    public void loadLocation(){
+
+    }
+
     //  === Methods below are there to facilitate server related operations. ===
 
     /**

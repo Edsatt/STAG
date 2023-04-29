@@ -5,6 +5,7 @@ import java.util.HashMap;
 public class PlayerCharacter extends Character{
     private final String username;
     private final HashMap<String, Artefact> inventory;
+    private Location location;
     
     public PlayerCharacter(String username){
         this.username = username;

@@ -1,9 +1,11 @@
 package edu.uob;
+import javax.swing.text.Document;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class GameCommand {
     Map map;
+    PlayerCharacter player;
     String command;
     ArrayList<Token> commandTokens;
 
@@ -14,6 +16,7 @@ public class GameCommand {
 
     public String handleCommand(Map map) {
         this.map = map;
+        this.player = map.getCurrentPlayer();
         String[] commandWords = command.split(" ");
         for (String word : commandWords) {
             tokenize(word);
@@ -51,8 +54,18 @@ public class GameCommand {
     }
 
     private String handleInventoryCommand() {
-        return "inventory";
+        String response = "";
+        HashMap<String, Artefact> inventory = player.getInventory();
+        if(inventory.isEmpty()){
+            return "Your inventory is empty";
+        }else{
+            for(Artefact item: inventory.values()){
+                response = response.concat(item.getDescription()+System.lineSeparator());
+            }
+            return response;
+        }
     }
+
 
     private String handleGetCommand() {
         return "get";
