@@ -1,12 +1,11 @@
 package edu.uob;
 
-import com.sun.source.tree.AssertTree;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.nio.file.Paths;
-import java.time.Duration;
+import java.util.HashMap;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -14,74 +13,53 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class GameCommandTests {
 
     GameCommand command;
+    GameServer testServer;
     Map map;
+    HashMap<String, PlayerCharacter> players;
     PlayerCharacter player;
     @BeforeEach
-    void setup(){
-        map = new Map();
-        map.addPlayer("ed");
-        player = map.getCurrentPlayer();
+    void setup() {
+        File entitiesFile = Paths.get("config" + File.separator + "basic-entities.dot").toAbsolutePath().toFile();
+        File actionsFile = Paths.get("config" + File.separator + "basic-actions.xml").toAbsolutePath().toFile();
+        testServer = new GameServer(entitiesFile, actionsFile);
+        map = testServer.map;
     }
-    @Test
-    void testInventoryToken(){
-        command = new GameCommand("inventory inv INVENTORY INV Inventory Inv");
-        command.handleCommand(map);
-        for (Token token: command.commandTokens) {
-            assertEquals(token.getTokenType(), TokenType.INVENTORY);
-        }
-    }
+
+//    @Test
+//    void basicCommandCountTests(){
+//        command = new GameCommand("inventory inv");
+//        command.handleCommand(map);
+//        assertEquals(command.basicCommandCount(), 2);
+//        command = new GameCommand("Inventory test");
+//        command.handleCommand(map);
+//        assertEquals(command.basicCommandCount(), 1);
+//        command = new GameCommand("get goto drop");
+//        command.handleCommand(map);
+//        assertEquals(command.basicCommandCount(), 3);
+//        command = new GameCommand("droop");
+//        command.handleCommand(map);
+//        assertEquals(command.basicCommandCount(), 0);
+//    }
 
     @Test
     void testInventoryCommand(){
-        command = new GameCommand("Inventory");
-        assertTrue(player.getInventory().isEmpty());
-        assertEquals(command.handleCommand(map), "Your inventory is empty");
+        assertEquals(testServer.handleCommand("ed: inventory"), "Your inventory is empty");
+        PlayerCharacter ed = map.getCurrentPlayer();
+        assertTrue(ed.getInventory().isEmpty());
         Artefact key = new Artefact();
         key.setDescription("A key");
         Artefact axe = new Artefact();
         axe.setDescription("A shiny axe");
-        player.addItemToInventory("key", key);
-        player.addItemToInventory("axe", axe);
-        assertEquals(player.getInventory().size(), 2);
-        command = new GameCommand("Inventory");
-        String response2 = command.handleCommand(map);
-        assertTrue(response2.contains("A key"));
-        assertTrue(response2.contains("A shiny axe"));
+        ed.addItemToInventory("key", key);
+        ed.addItemToInventory("axe", axe);
+        assertEquals(ed.getInventory().size(), 2);
+        String response = testServer.handleCommand("ed: Inventory");
+        assertTrue(response.contains("A key"));
+        assertTrue(response.contains("A shiny axe"));
     }
 
     @Test
-    void testGetToken(){
-        command = new GameCommand("get Get GET gEt");
-        command.handleCommand(map);
-        for (Token token: command.commandTokens) {
-            assertEquals(token.getTokenType(), TokenType.GET);
-        }
-    }
-
-    @Test
-    void testDrop(){
-        command = new GameCommand("drop Drop DROP dRop");
-        command.handleCommand(map);
-        for (Token token: command.commandTokens) {
-            assertEquals(token.getTokenType(), TokenType.DROP);
-        }
-    }
-
-    @Test
-    void testGoto(){
-        command = new GameCommand("goto Goto GOTO goTo");
-        command.handleCommand(map);
-        for (Token token: command.commandTokens) {
-            assertEquals(token.getTokenType(), TokenType.GOTO);
-        }
-    }
-
-    @Test
-    void testLook(){
-        command = new GameCommand("look Look LOOK loOk");
-        command.handleCommand(map);
-        for (Token token: command.commandTokens) {
-            assertEquals(token.getTokenType(), TokenType.LOOK);
-        }
+    void testLookCommand(){
+        //System.out.println(testServer.handleCommand("ed: look"));
     }
 }

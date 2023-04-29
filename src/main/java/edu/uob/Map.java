@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 public class Map {
+    private String startLocationKey;
     private PlayerCharacter currentPlayer;
     private Location currentLocation;
     private final LinkedHashMap<String, Location> locations;
@@ -14,17 +15,26 @@ public class Map {
         this.players = new HashMap<>();
     }
 
-    public void setCurrentLocation(Location location){
-        currentLocation = location;
+    public void setStartLocationKey(String key){
+        this.startLocationKey = key;
     }
 
-    public void addPlayer(String username){
+    public void selectPlayer(String username){
         if(!players.containsKey(username)){
-            PlayerCharacter player = new PlayerCharacter(username);
-            player.setAliveStatus(true);
-            players.put(username, player);
+            setupNewPlayer(username);
         }
         this.currentPlayer = players.get(username);
+    }
+
+    public void setupNewPlayer(String username){
+        PlayerCharacter player = new PlayerCharacter(username);
+        player.setAliveStatus(true);
+        players.put(username, player);
+        player.setLocation(locations.get(startLocationKey));
+    }
+
+    public void loadLocation(){
+        this.currentLocation = currentPlayer.getLocation();
     }
 
     public void addLocation(String id, Location location){

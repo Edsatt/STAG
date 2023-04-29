@@ -4,7 +4,6 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.file.Paths;
-import java.util.HashMap;
 
 /** This class implements the STAG server. */
 public final class GameServer {
@@ -46,13 +45,10 @@ public final class GameServer {
         String[] parts = input.split(": ");
         String username = parts[0];
         String command = parts[1];
-        map.addPlayer(username);
+        map.selectPlayer(username);
+        map.loadLocation();
         GameCommand gc = new GameCommand(command);
         return gc.handleCommand(map);
-    }
-
-    public void loadLocation(){
-
     }
 
     //  === Methods below are there to facilitate server related operations. ===

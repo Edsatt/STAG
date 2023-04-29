@@ -39,6 +39,24 @@ class MapTests {
         assertTrue(players.get("isobel").isAlive());
         assertTrue(players.get("ed").getInventory().isEmpty());
     }
+
+    @Test
+    void startRoomTests(){
+        testServer.handleCommand("ed: inventory");
+        PlayerCharacter ed = players.get("ed");
+        assertEquals(ed.getLocation(), map.getCurrentLocation());
+        assertEquals(ed.getLocation().getId(),"cabin");
+        testServer.handleCommand("ed: look");
+        assertEquals(ed.getLocation(), map.getCurrentLocation());
+        assertEquals(ed.getLocation().getId(),"cabin");
+
+        //map.currentLocation is dependent on the location of the active player
+        ed.setLocation(map.getLocation("forest"));
+        assertEquals(ed.getLocation().getId(), "forest");
+        assertNotEquals(map.getCurrentLocation().getId(), "forest");
+        testServer.handleCommand("ed: look");
+        assertEquals(map.getCurrentLocation().getId(), "forest");
+    }
 }
 
 

@@ -59,7 +59,7 @@ public class EntityParser {
             String entityId = subgraph.getId().getId();
             createEntity(newLocation, entityId, subgraph.getNodes(false));
         }
-        specialLocationSetup(newLocation);
+        specialLocationSetup(locationId, newLocation);
         map.addLocation(locationId, newLocation);
     }
 
@@ -93,12 +93,12 @@ public class EntityParser {
         map.getLocation(source).addPath(target);
     }
 
-    public void specialLocationSetup(Location location){
+    public void specialLocationSetup(String key, Location location){
         if(location.getId().equalsIgnoreCase("storeroom")){
             location.setStoreroom(true);
         }
         if(map.getLocations().isEmpty()){
-            location.setStartLocation(true);
+            map.setStartLocationKey(key);
         }
     }
 }

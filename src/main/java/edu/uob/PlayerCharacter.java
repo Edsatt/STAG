@@ -12,6 +12,14 @@ public class PlayerCharacter extends Character{
         this.inventory = new HashMap<>();
     }
 
+    public void setLocation(Location location){
+        this.location = location;
+    }
+
+    public Location getLocation() {
+        return location;
+    }
+
     public String getUsername() {
         return username;
     }
