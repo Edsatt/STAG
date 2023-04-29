@@ -35,13 +35,13 @@ class LocationTests {
         assertFalse(room.getCharacters().isEmpty());
         assertTrue(room.getPaths().contains("Forest") && room.getPaths().contains("Cabin"));
         assertTrue(room.getArtefacts().containsKey("key"));
-        assertEquals(room.getArtefacts().get("key"), "An old key");
+        assertEquals(room.getArtefacts().get("key").getDescription(), "An old key");
         assertTrue(room.getArtefacts().containsKey("fish"));
-        assertEquals(room.getArtefacts().get("fish"), "A rotten fish");
-        assertEquals(room.getCharacters().get("dwarf"), "A bulky dwarf");
-        assertEquals(room.getCharacters().get("dragon"), "An angry dragon");
-        assertEquals(room.getFurniture().get("door"), "A locked door");
-        assertEquals(room.getFurniture().get("window"), "An ornate window");
+        assertEquals(room.getArtefacts().get("fish").getDescription(), "A rotten fish");
+        assertEquals(room.getCharacters().get("dwarf").getDescription(), "A bulky dwarf");
+        assertEquals(room.getCharacters().get("dragon").getDescription(), "An angry dragon");
+        assertEquals(room.getFurniture().get("door").getDescription(), "A locked door");
+        assertEquals(room.getFurniture().get("window").getDescription(), "An ornate window");
     }
 }
 

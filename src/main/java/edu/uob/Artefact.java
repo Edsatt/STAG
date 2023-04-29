@@ -1,4 +1,4 @@
 package edu.uob;
 
-public class Artefact {
+public class Artefact extends LocationContent{
 }

@@ -38,27 +38,27 @@ class EntityParserTests {
         assertTrue(cellar.getArtefacts().isEmpty());
         assertTrue(cellar.getFurniture().isEmpty());
         assertTrue(cellar.getCharacters().containsKey("elf"));
-        assertEquals(cellar.getCharacters().get("elf"), "Angry Elf");
+        assertEquals(cellar.getCharacters().get("elf").getDescription(), "Angry Elf");
         assertTrue(cellar.getPaths().contains("cabin"));
 
         Location cabin= map.locations.get("cabin");
         assertEquals(cabin.getDescription(), "A log cabin in the woods");
         assertTrue(cabin.getCharacters().isEmpty());
         assertTrue(cabin.getArtefacts().containsKey("potion"));
-        assertEquals(cabin.getArtefacts().get("potion"), "Magic potion");
+        assertEquals(cabin.getArtefacts().get("potion").getDescription(), "Magic potion");
         assertTrue(cabin.getArtefacts().containsKey("axe"));
-        assertEquals(cabin.getArtefacts().get("axe"), "Shiny axe");
+        assertEquals(cabin.getArtefacts().get("axe").getDescription(), "Shiny axe");
         assertTrue(cabin.getFurniture().containsKey("trapdoor"));
-        assertEquals(cabin.getFurniture().get("trapdoor"), "Wooden trapdoor");
+        assertEquals(cabin.getFurniture().get("trapdoor").getDescription(), "Wooden trapdoor");
         assertTrue(cabin.getPaths().contains("forest"));
 
         Location forest= map.locations.get("forest");
         assertEquals(forest.getDescription(), "A dark forest");
         assertTrue(forest.getCharacters().isEmpty());
         assertTrue(forest.getArtefacts().containsKey("key"));
-        assertEquals(forest.getArtefacts().get("key"), "Brass key");
+        assertEquals(forest.getArtefacts().get("key").getDescription(), "Brass key");
         assertTrue(forest.getFurniture().containsKey("tree"));
-        assertEquals(forest.getFurniture().get("tree"), "A big tree");
+        assertEquals(forest.getFurniture().get("tree").getDescription(), "A big tree");
         assertTrue(forest.getPaths().contains("cabin"));
 
         Location storeroom= map.locations.get("storeroom");
@@ -66,7 +66,7 @@ class EntityParserTests {
         assertTrue(storeroom.getCharacters().isEmpty());
         assertTrue(storeroom.getFurniture().isEmpty());
         assertTrue(storeroom.getArtefacts().containsKey("log"));
-        assertEquals(storeroom.getArtefacts().get("log"), "A heavy wooden log");
+        assertEquals(storeroom.getArtefacts().get("log").getDescription(), "A heavy wooden log");
         assertTrue(storeroom.getPaths().isEmpty());
     }
 }

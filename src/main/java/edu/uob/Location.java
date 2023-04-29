@@ -1,16 +1,15 @@
 package edu.uob;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 
 public class Location {
     private final String id;
     private String description;
-    private final HashMap<String, String> characters;
-    private final HashMap<String, String> artefacts;
-    private final HashMap<String, String> furniture;
-    private HashSet<String> paths;
+    private final HashMap<String, NonPlayerCharacter> characters;
+    private final HashMap<String, Artefact> artefacts;
+    private final HashMap<String, Furniture> furniture;
+    private final HashSet<String> paths;
     public Location(String id){
         this.id = id;
         this.characters = new HashMap<>();
@@ -24,16 +23,22 @@ public class Location {
     }
 
     public void addValuePair(String entityType, String id, String description){
-        //System.out.println(entityType+" "+id+" "+description);
         switch (entityType){
             case "characters" -> {
-                characters.put(id, description);
+                NonPlayerCharacter npc = new NonPlayerCharacter();
+                npc.setDescription(description);
+                npc.setAliveStatus(true);
+                characters.put(id, npc);
             }
             case "artefacts" -> {
-                artefacts.put(id, description);
+                Artefact artefact = new Artefact();
+                artefact.setDescription(description);
+                artefacts.put(id, artefact);
             }
             case "furniture" -> {
-                furniture.put(id, description);
+                Furniture furnitureItem = new Furniture();
+                furnitureItem.setDescription(description);
+                furniture.put(id, furnitureItem);
             }
         }
     }
@@ -46,15 +51,15 @@ public class Location {
         return description;
     }
 
-    public HashMap<String, String> getArtefacts() {
+    public HashMap<String, Artefact> getArtefacts() {
         return artefacts;
     }
 
-    public HashMap<String, String> getCharacters() {
+    public HashMap<String, NonPlayerCharacter> getCharacters() {
         return characters;
     }
 
-    public HashMap<String, String> getFurniture() {
+    public HashMap<String, Furniture> getFurniture() {
         return furniture;
     }
 
