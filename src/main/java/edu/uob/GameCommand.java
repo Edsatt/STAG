@@ -1,24 +1,27 @@
 package edu.uob;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class GameCommand {
+    Map map;
     String command;
     ArrayList<Token> commandTokens;
 
     public GameCommand(String input) {
         this.command = input;
         this.commandTokens = new ArrayList<>();
-        handleCommand();
     }
 
-    public void handleCommand() {
+    public String handleCommand(Map map) {
+        this.map = map;
         String[] commandWords = command.split(" ");
         for (String word : commandWords) {
             tokenize(word);
         }
         for (Token token : commandTokens) {
-            interpretCommand(token);
+            return interpretCommand(token);
         }
+        return "";
     }
 
     private void tokenize(String word) {
@@ -26,34 +29,45 @@ public class GameCommand {
         commandTokens.add(token);
     }
 
-    private void interpretCommand(Token token) {
+    private String interpretCommand(Token token) {
         switch (token.tokenType) {
             case INVENTORY -> {
-                handleInventoryCommand();
+                return handleInventoryCommand();
             }
             case GET -> {
-                handleGetCommand();
+                return handleGetCommand();
             }
             case DROP -> {
-                handleDropCommand();
+                return handleDropCommand();
             }
             case GOTO -> {
-                handleGotoCommand();
+                return handleGotoCommand();
             }
             case LOOK -> {
-                handleLookCommand();
+                return handleLookCommand();
             }
         }
+        return "";
     }
 
-    private void handleInventoryCommand() {System.out.println("inventory");}
+    private String handleInventoryCommand() {
+        return "inventory";
+    }
 
-    private void handleGetCommand() {System.out.println("get");}
+    private String handleGetCommand() {
+        return "get";
+    }
 
-    private void handleDropCommand() {System.out.println("drop");}
+    private String handleDropCommand() {
+        return "drop";
+    }
 
-    private void handleGotoCommand(){System.out.println("goto");}
+    private String handleGotoCommand(){
+        return "goto";
+    }
 
-    private void handleLookCommand(){System.out.println("look");}
+    private String handleLookCommand(){
+        return "look";
+    }
 
 }

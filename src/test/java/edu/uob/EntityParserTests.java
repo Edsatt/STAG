@@ -5,16 +5,19 @@ import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.nio.file.Paths;
+import java.util.HashMap;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class EntityParserTests {
 
     Map map;
+    HashMap<String, Location> locations;
     @BeforeEach
     void setup() {
         File entitiesFile = Paths.get("config" + File.separator + "basic-entities.dot").toAbsolutePath().toFile();
         map = new Map();
+        locations = map.getLocations();
         EntityParser entityParser = new EntityParser(map, entitiesFile);
         entityParser.parse();
         entityParser.createLocations();
@@ -23,17 +26,17 @@ class EntityParserTests {
     @Test
     void mapTests(){
         //Check that map contains all locations from the entity file
-        assertEquals(map.locations.size(), 4);
-        assertTrue(map.locations.containsKey("cabin"));
-        assertTrue(map.locations.containsKey("forest"));
-        assertTrue(map.locations.containsKey("cellar"));
-        assertTrue(map.locations.containsKey("storeroom"));
+        assertEquals(locations.size(), 4);
+        assertTrue(locations.containsKey("cabin"));
+        assertTrue(locations.containsKey("forest"));
+        assertTrue(locations.containsKey("cellar"));
+        assertTrue(locations.containsKey("storeroom"));
     }
 
     @Test
     void locationTests(){
         //Check that each location contains the correct description, entities and paths
-        Location cellar = map.locations.get("cellar");
+        Location cellar = locations.get("cellar");
         assertEquals(cellar.getDescription(), "A dusty cellar");
         assertTrue(cellar.getArtefacts().isEmpty());
         assertTrue(cellar.getFurniture().isEmpty());
@@ -41,7 +44,7 @@ class EntityParserTests {
         assertEquals(cellar.getCharacters().get("elf").getDescription(), "Angry Elf");
         assertTrue(cellar.getPaths().contains("cabin"));
 
-        Location cabin= map.locations.get("cabin");
+        Location cabin = locations.get("cabin");
         assertEquals(cabin.getDescription(), "A log cabin in the woods");
         assertTrue(cabin.getCharacters().isEmpty());
         assertTrue(cabin.getArtefacts().containsKey("potion"));
@@ -52,7 +55,7 @@ class EntityParserTests {
         assertEquals(cabin.getFurniture().get("trapdoor").getDescription(), "Wooden trapdoor");
         assertTrue(cabin.getPaths().contains("forest"));
 
-        Location forest= map.locations.get("forest");
+        Location forest = locations.get("forest");
         assertEquals(forest.getDescription(), "A dark forest");
         assertTrue(forest.getCharacters().isEmpty());
         assertTrue(forest.getArtefacts().containsKey("key"));
@@ -61,7 +64,7 @@ class EntityParserTests {
         assertEquals(forest.getFurniture().get("tree").getDescription(), "A big tree");
         assertTrue(forest.getPaths().contains("cabin"));
 
-        Location storeroom= map.locations.get("storeroom");
+        Location storeroom = locations.get("storeroom");
         assertEquals(storeroom.getDescription(), "Storage for any entities not placed in the game");
         assertTrue(storeroom.getCharacters().isEmpty());
         assertTrue(storeroom.getFurniture().isEmpty());

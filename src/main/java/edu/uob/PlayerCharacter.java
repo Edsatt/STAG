@@ -1,14 +1,33 @@
 package edu.uob;
 
+import java.util.HashMap;
+
 public class PlayerCharacter extends Character{
-
-    private String userName;
-
-    public void setUserName(String userName) {
-        this.userName = userName;
+    private final String username;
+    private final HashMap<String, Artefact> inventory;
+    
+    public PlayerCharacter(String username){
+        this.username = username;
+        this.inventory = new HashMap<>();
     }
 
-    public String getUserName() {
-        return userName;
+    public String getUsername() {
+        return username;
     }
+    
+    public void addItemToInventory(String id, Artefact item){
+        inventory.put(id, item);
+    }
+
+    public boolean removeItemFromInventory(String id){
+        if(inventory.containsKey(id)){
+            inventory.remove(id);
+            return true;
+        } else return false;
+    }
+    public HashMap<String, Artefact> getInventory() {
+        return inventory;
+    }
+    
+    
 }
