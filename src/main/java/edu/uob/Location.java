@@ -53,6 +53,10 @@ public class Location {
         paths.add(path);
     }
 
+    public void addArtefact(String id, Artefact item){
+        artefacts.put(id, item);
+    }
+
     public String getId(){
         return id;
     }
@@ -67,6 +71,12 @@ public class Location {
 
     public HashMap<String, Artefact> getArtefacts() {
         return artefacts;
+    }
+
+    public Artefact getArtefactByKey(String key){
+        Artefact item = artefacts.get(key);
+        artefacts.remove(key);
+        return item;
     }
 
     public HashMap<String, NonPlayerCharacter> getCharacters() {
@@ -84,6 +94,4 @@ public class Location {
     public boolean checkPaths(String path){
         return paths.contains(path);
     }
-
-
 }

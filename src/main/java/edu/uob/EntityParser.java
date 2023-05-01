@@ -61,6 +61,7 @@ public class EntityParser {
         }
         specialLocationSetup(locationId, newLocation);
         map.addLocation(locationId, newLocation);
+        map.addSubjectKey(locationId);
     }
 
     private void createEntity(Location location, String entityId, ArrayList<Node> node){
@@ -69,6 +70,7 @@ public class EntityParser {
             String description = value.getAttribute("description");
             if(!id.isEmpty() && !description.isEmpty()){
                 location.addValuePair(entityId, id, description);
+                map.addSubjectKey(id);
             }
         }
     }

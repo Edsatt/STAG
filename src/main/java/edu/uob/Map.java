@@ -1,5 +1,6 @@
 package edu.uob;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
@@ -9,14 +10,20 @@ public class Map {
     private Location currentLocation;
     private final LinkedHashMap<String, Location> locations;
     private final HashMap<String, PlayerCharacter> players;
+    private ArrayList<String> subjects;
 
     public Map(){
         this.locations = new LinkedHashMap<>();
         this.players = new HashMap<>();
+        this.subjects = new ArrayList<>();
     }
 
     public void setStartLocationKey(String key){
         this.startLocationKey = key;
+    }
+
+    public void addSubjectKey(String key){
+        subjects.add(key);
     }
 
     public void selectPlayer(String username){
@@ -63,5 +70,9 @@ public class Map {
 
     public LinkedHashMap<String, Location> getLocations() {
         return locations;
+    }
+
+    public ArrayList<String> getSubjects() {
+        return subjects;
     }
 }

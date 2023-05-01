@@ -28,12 +28,15 @@ public class PlayerCharacter extends Character{
         inventory.put(id, item);
     }
 
-    public boolean removeItemFromInventory(String id){
+    public Artefact dropItem(String id){
+        Artefact item = null;
         if(inventory.containsKey(id)){
+            item = inventory.get(id);
             inventory.remove(id);
-            return true;
-        } else return false;
+        }
+        return item;
     }
+
     public HashMap<String, Artefact> getInventory() {
         return inventory;
     }

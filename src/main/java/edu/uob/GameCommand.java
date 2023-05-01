@@ -5,10 +5,10 @@ import java.util.HashMap;
 
 public class GameCommand {
     private final String newLine = System.lineSeparator();
-    private final Integer programCount;
     private Map map;
     private PlayerCharacter player;
     private final String command;
+    private String subject;
     private final ArrayList<String> commandWords;
     private Location currentLocation;
     private HashMap<String, Artefact> inventory;
@@ -16,19 +16,54 @@ public class GameCommand {
     public GameCommand(String input) {
         this.command = input.toLowerCase();
         this.commandWords = new ArrayList<>();
-        this.programCount=0;
     }
 
     public String handleCommand(Map map) {
         this.map = map;
         this.player = map.getCurrentPlayer();
+        this.currentLocation = player.getLocation();
         commandWords.addAll(Arrays.asList(command.split(" ")));
 
         return interpretCommand();
     }
 
     private String interpretCommand(){
-        return basicCommandCheck();
+        return subjectCheck();
+    }
+
+    public String subjectCheck(){
+        String response = "";
+        switch (subjectCount()){
+            case 0,1 -> response = basicCommandCheck();
+            case 2 -> response = "Command cannot contain more than one subject";
+        }
+        return response;
+    }
+
+    public int subjectCount(){
+        int count = 0;
+        StringBuilder subjects = new StringBuilder();
+        for(String subject: map.getSubjects()){
+            subjects.append(subject).append("|");
+        }
+        subjects.deleteCharAt(subjects.length()-1);
+        String regex = "\\b("+subjects+")\\b";
+
+        for(String word: commandWords){
+            if(word.matches(regex)){
+                count ++;
+                setSubject(word);
+            }
+        }
+        return count;
+    }
+
+    private void setSubject(String subject){
+        this.subject = subject;
+    }
+
+    public String getSubject(){
+        return subject;
     }
 
     private String basicCommandCheck() {
@@ -41,11 +76,11 @@ public class GameCommand {
         return response;
     }
 
-    public int basicCommandCount(){
+    public int basicCommandCount() {
         String regex = "\\b(inventory|inv|get|drop|goto|look)\\b";
         int count = 0;
-        for(String word: commandWords){
-            if(word.matches(regex)){
+        for (String word : commandWords) {
+            if (word.matches(regex)) {
                 count++;
             }
         }
@@ -79,21 +114,35 @@ public class GameCommand {
         }
     }
 
-
     private String handleGetCommand() {
-        return "get";
+        Artefact item = currentLocation.getArtefactByKey(subject);
+        if(subject == null || item==null){
+            return ("Error: Get must be followed by an item in the current location");
+        }else{
+            player.addItemToInventory(subject, item);
+            return ("You pick up the "+item.getDescription());
+        }
     }
 
     private String handleDropCommand() {
-        return "drop";
+        Artefact item = player.dropItem(subject);
+        if(subject == null || item==null){
+            return ("Error: Cannot drop an item is not in your inventory");
+        }else{
+            currentLocation.addArtefact(subject, item);
+            return ("You drop the "+item.getDescription());
+        }
     }
 
     private String handleGotoCommand(){
-        return "goto";
+        if(currentLocation.checkPaths(subject)){
+            currentLocation = map.getLocation(subject);
+            player.setLocation(currentLocation);
+            return handleLookCommand();
+        }else return "Error: goto command must be followed by a location you can travel to";
     }
 
     private String handleLookCommand(){
-        this.currentLocation = player.getLocation();
         StringBuilder response = new StringBuilder("You are in a ");
         response.append(currentLocation.getDescription()).append(". You can see:").append(newLine);
 
@@ -112,5 +161,4 @@ public class GameCommand {
         }
         return response.toString();
     }
-
 }

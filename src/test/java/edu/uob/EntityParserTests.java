@@ -5,6 +5,8 @@ import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -75,5 +77,23 @@ class EntityParserTests {
         assertEquals(storeroom.getArtefacts().get("log").getDescription(), "A heavy wooden log");
         assertTrue(storeroom.getPaths().isEmpty());
         assertTrue(storeroom.isStoreroom());
+
+//        ArrayList<String> subjectList = map.getSubjects();
+//        String[] subjects = new String[subjectList.size()];
+//        for(int i=0; i< subjects.length; i++){
+//            subjects[i] = subjectList.get(i);
+//        }
+//        String regex = "\\b("+String.join("|", subjects)+")\\b";
+
+        StringBuilder subjects = new StringBuilder();
+        for(String subject: map.getSubjects()){
+            subjects.append(subject).append("|");
+        }
+        subjects.deleteCharAt(subjects.length()-1);
+        String regex = "\\b("+subjects+")\\b";
+
+
+
+        System.out.println(regex);
     }
 }

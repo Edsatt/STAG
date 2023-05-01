@@ -25,21 +25,46 @@ public class GameCommandTests {
         map = testServer.map;
     }
 
-//    @Test
-//    void basicCommandCountTests(){
-//        command = new GameCommand("inventory inv");
-//        command.handleCommand(map);
-//        assertEquals(command.basicCommandCount(), 2);
-//        command = new GameCommand("Inventory test");
-//        command.handleCommand(map);
-//        assertEquals(command.basicCommandCount(), 1);
-//        command = new GameCommand("get goto drop");
-//        command.handleCommand(map);
-//        assertEquals(command.basicCommandCount(), 3);
-//        command = new GameCommand("droop");
-//        command.handleCommand(map);
-//        assertEquals(command.basicCommandCount(), 0);
-//    }
+    @Test
+    void basicCommandCountTests(){
+        map.selectPlayer("ed");
+        command = new GameCommand("ed: inventory inv");
+        command.handleCommand(map);
+        assertEquals(command.basicCommandCount(), 2);
+        command = new GameCommand("ed: Inventory test");
+        command.handleCommand(map);
+        assertEquals(command.basicCommandCount(), 1);
+        command = new GameCommand("ed: get goto drop");
+        command.handleCommand(map);
+        assertEquals(command.basicCommandCount(), 3);
+        command = new GameCommand("ed: droop");
+        command.handleCommand(map);
+        assertEquals(command.basicCommandCount(), 0);
+        assertEquals(testServer.handleCommand("ed: inventory inv"), "Input cannot contain more than one command");
+    }
+
+    @Test
+    void subjectCountTests(){
+        map.selectPlayer("ed");
+        command = new GameCommand("ed: get key key");
+        command.handleCommand(map);
+        assertEquals(command.subjectCount(), 2);
+        command = new GameCommand("ed: get key axe");
+        command.handleCommand(map);
+        assertEquals(command.subjectCount(), 2);
+        command = new GameCommand("ed: get key");
+        command.handleCommand(map);
+        assertEquals(command.subjectCount(), 1);
+        assertEquals(command.getSubject(), "key");
+        command = new GameCommand("ed: inventory");
+        command.handleCommand(map);
+        assertEquals(command.subjectCount(), 0);
+        command = new GameCommand("ed: get bronze key");
+        command.handleCommand(map);
+        assertEquals(command.getSubject(), "key");
+        assertEquals(command.subjectCount(), 1);
+        assertEquals(testServer.handleCommand("ed: get key axe"), "Command cannot contain more than one subject");
+    }
 
     @Test
     void testInventoryCommand(){
@@ -61,5 +86,42 @@ public class GameCommandTests {
     @Test
     void testLookCommand(){
         //System.out.println(testServer.handleCommand("ed: look"));
+    }
+
+    @Test
+    void testGetCommand(){
+        testServer.handleCommand("ed: inv");
+        PlayerCharacter ed = map.getCurrentPlayer();
+        assertTrue(ed.getInventory().isEmpty());
+        testServer.handleCommand("ed: get axe");
+        assertTrue(ed.getInventory().containsKey("axe"));
+        assertFalse(map.getCurrentLocation().getArtefacts().containsKey("axe"));
+        assertEquals(testServer.handleCommand("ed: get"),"Error: Get must be followed by an item in the current location");
+        assertEquals(testServer.handleCommand("ed: get key"),"Error: Get must be followed by an item in the current location");
+    }
+
+    @Test
+    void testDropCommand(){
+        testServer.handleCommand("ed: look");
+        PlayerCharacter ed = map.getCurrentPlayer();
+        testServer.handleCommand("ed: get axe");
+        assertTrue(ed.getInventory().containsKey("axe"));
+        testServer.handleCommand("ed: goto forest");
+        testServer.handleCommand("ed: look");
+        assertEquals(map.getCurrentLocation().getId(),"forest");
+        assertFalse(map.getCurrentLocation().getArtefacts().containsKey("axe"));
+        assertEquals(testServer.handleCommand("ed: drop axe"),"You drop the Shiny axe");
+        assertFalse(ed.getInventory().containsKey("axe"));
+        assertTrue(map.getCurrentLocation().getArtefacts().containsKey("axe"));
+    }
+
+    @Test
+    void testGotoCommand(){
+//        System.out.println(testServer.handleCommand("ed: look"));
+//        System.out.println(testServer.map.getCurrentLocation().getId());
+//        System.out.println(testServer.handleCommand("ed: goto forest"));
+//        System.out.println(testServer.map.getCurrentLocation().getId());
+//        System.out.println(testServer.handleCommand("ed: look"));
+//        System.out.println(testServer.map.getCurrentLocation().getId());
     }
 }
