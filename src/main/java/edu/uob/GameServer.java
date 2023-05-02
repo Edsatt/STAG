@@ -13,7 +13,7 @@ public final class GameServer {
 
     public static void main(String[] args) throws IOException {
         File entitiesFile = Paths.get("config" + File.separator + "extended-entities.dot").toAbsolutePath().toFile();
-        File actionsFile = Paths.get("config" + File.separator + "extended-actions.xml").toAbsolutePath().toFile();
+        File actionsFile = Paths.get("config" + File.separator + "basic-actions.xml").toAbsolutePath().toFile();
         GameServer server = new GameServer(entitiesFile, actionsFile);
         server.blockingListenOn(8888);
     }
@@ -31,8 +31,10 @@ public final class GameServer {
     public GameServer(File entitiesFile, File actionsFile){
         this.map = new Map();
         EntityParser entityParser = new EntityParser(map, entitiesFile);
+        ActionParser actionParser = new ActionParser(map, actionsFile);
         entityParser.parse();
         entityParser.createLocations();
+        actionParser.parse();
     }
 
     /**

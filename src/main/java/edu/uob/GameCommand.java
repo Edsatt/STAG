@@ -1,12 +1,13 @@
 package edu.uob;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class GameCommand {
     private Map map;
     private final String command;
     private String subject;
-    private final ArrayList<String> commandWords;
+    private final List<String> commandWords;
 
     public GameCommand(String input) {
         this.command = input.toLowerCase();
@@ -83,7 +84,7 @@ public class GameCommand {
     }
 
     private String handleBasicCommand(){
-        BasicCommand basicCommand = new BasicCommand(commandWords, map, subject);
+        BasicCommand basicCommand = new BasicCommand((ArrayList<String>) commandWords, map, subject);
         return basicCommand.handleBasicCommand();
     }
 }

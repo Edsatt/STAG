@@ -2,10 +2,11 @@ package edu.uob;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class BasicCommand {
     private final String newLine = System.lineSeparator();
-    private final ArrayList<String> commandWords;
+    private final List<String> commandWords;
     private final Map map;
     private final PlayerCharacter player;
     private Location currentLocation;
