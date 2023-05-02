@@ -1,6 +1,6 @@
 package edu.uob;
 
-public class NonPlayerCharacter extends Character{
+public class NonPlayerCharacter extends GameCharacter {
     private String description;
 
     public void setDescription(String description) {

@@ -12,8 +12,8 @@ public final class GameServer {
     public final Map map;
 
     public static void main(String[] args) throws IOException {
-        File entitiesFile = Paths.get("config" + File.separator + "basic-entities.dot").toAbsolutePath().toFile();
-        File actionsFile = Paths.get("config" + File.separator + "basic-actions.xml").toAbsolutePath().toFile();
+        File entitiesFile = Paths.get("config" + File.separator + "extended-entities.dot").toAbsolutePath().toFile();
+        File actionsFile = Paths.get("config" + File.separator + "extended-actions.xml").toAbsolutePath().toFile();
         GameServer server = new GameServer(entitiesFile, actionsFile);
         server.blockingListenOn(8888);
     }
@@ -43,12 +43,16 @@ public final class GameServer {
     */
     public String handleCommand(String input) {
         String[] parts = input.split(": ");
-        String username = parts[0];
-        String command = parts[1];
-        map.selectPlayer(username);
-        map.loadLocation();
-        GameCommand gc = new GameCommand(command);
-        return gc.handleCommand(map);
+        if(parts.length==2){
+            String username = parts[0];
+            String command = parts[1];
+            map.selectPlayer(username);
+            map.loadLocation();
+            GameCommand gc = new GameCommand(command);
+            return gc.handleCommand(map);
+        }else{
+            return "Please enter a valid command";
+        }
     }
 
     //  === Methods below are there to facilitate server related operations. ===

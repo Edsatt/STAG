@@ -63,7 +63,8 @@ public class GameCommandTests {
         command.handleCommand(map);
         assertEquals(command.getSubject(), "key");
         assertEquals(command.subjectCount(), 1);
-        assertEquals(testServer.handleCommand("ed: get key axe"), "Command cannot contain more than one subject");
+        String response = testServer.handleCommand("ed: key axe");
+        assertTrue(response.contains("Error"));
     }
 
     @Test
@@ -71,21 +72,26 @@ public class GameCommandTests {
         assertEquals(testServer.handleCommand("ed: inventory"), "Your inventory is empty");
         PlayerCharacter ed = map.getCurrentPlayer();
         assertTrue(ed.getInventory().isEmpty());
-        Artefact key = new Artefact();
-        key.setDescription("A key");
-        Artefact axe = new Artefact();
-        axe.setDescription("A shiny axe");
-        ed.addItemToInventory("key", key);
-        ed.addItemToInventory("axe", axe);
-        assertEquals(ed.getInventory().size(), 2);
-        String response = testServer.handleCommand("ed: Inventory");
-        assertTrue(response.contains("A key"));
-        assertTrue(response.contains("A shiny axe"));
+        assertEquals(testServer.handleCommand("ed: get axe"), "You pick up the Shiny axe");
+        assertTrue(ed.getInventory().containsKey("axe"));
+        assertFalse(map.getCurrentLocation().getArtefacts().containsKey("axe"));
+        String response1 = testServer.handleCommand("ed: inventory potion");
+        assertTrue(response1.contains("Error"));
+        String response2 = testServer.handleCommand("ed: inventory please");
+        assertTrue(response2.contains("You are holding the following items:"));
     }
 
     @Test
     void testLookCommand(){
-        //System.out.println(testServer.handleCommand("ed: look"));
+        String response1 = testServer.handleCommand("ed: look");
+        assertTrue(response1.contains("cabin"));
+        String response2 = testServer.handleCommand("ed: look forest");
+        assertTrue(response2.contains("Error"));
+        String response3 = testServer.handleCommand("ed: look around");
+        assertTrue(response3.contains("cabin"));
+        testServer.handleCommand("ed: goto forest");
+        String response4 = testServer.handleCommand("ed: look");
+        assertTrue(response4.contains("forest"));
     }
 
     @Test
@@ -117,11 +123,12 @@ public class GameCommandTests {
 
     @Test
     void testGotoCommand(){
-//        System.out.println(testServer.handleCommand("ed: look"));
-//        System.out.println(testServer.map.getCurrentLocation().getId());
-//        System.out.println(testServer.handleCommand("ed: goto forest"));
-//        System.out.println(testServer.map.getCurrentLocation().getId());
-//        System.out.println(testServer.handleCommand("ed: look"));
-//        System.out.println(testServer.map.getCurrentLocation().getId());
+        testServer.handleCommand("ed: look");
+        String response1 = testServer.handleCommand("ed: goto forest");
+        assertTrue(response1.contains("forest"));
+        String response2 = testServer.handleCommand("ed: goto cellar");
+        assertTrue(response2.contains("Error"));
+        String response3 = testServer.handleCommand("ed: goto cabin axe");
+        assertTrue(response3.contains("Error"));
     }
 }

@@ -1,4 +1,4 @@
 package edu.uob;
 
-public class Artefact extends LocationContent{
+public class Artefact extends GameEntity {
 }

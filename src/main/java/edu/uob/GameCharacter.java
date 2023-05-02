@@ -1,6 +1,6 @@
 package edu.uob;
 
-public class Character {
+public abstract class GameCharacter {
     private Boolean alive;
 
     public void setAliveStatus(Boolean alive){

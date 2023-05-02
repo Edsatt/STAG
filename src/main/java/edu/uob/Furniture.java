@@ -1,4 +1,4 @@
 package edu.uob;
 
-public class Furniture extends LocationContent{
+public class Furniture extends GameEntity {
 }
