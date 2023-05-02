@@ -6,6 +6,9 @@ public class ActionCommand extends GameCommand{
     private final ArrayList<String> triggerList;
     private ArrayList<String> subjectList;
     private String trigger;
+    private String producedEntity;
+    private String consumedEntity;
+    private String Narration;
 
     public ActionCommand(ArrayList<String> commandWords, Map map){
         super(commandWords, map);
