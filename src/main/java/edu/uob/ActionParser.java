@@ -46,11 +46,9 @@ public class ActionParser {
         Element root = document.getDocumentElement();
         this.actions = root.getChildNodes();
         this.numActions = actions.getLength();
-        createActions();
-
     }
 
-    private void createActions(){
+    public void createActions(){
         for(int i=0; i<numActions; i++){
             if(i%2!=0) {
                 this.actionElement = (Element)actions.item(i);
@@ -65,7 +63,7 @@ public class ActionParser {
         }
     }
 
-    private String [] getElements(String componentName, String elementName){
+    public String [] getElements(String componentName, String elementName){
         Element component = (Element) actionElement.getElementsByTagName(componentName).item(0);
         NodeList elements = component.getElementsByTagName(elementName);
         int length = elements.getLength();
@@ -76,7 +74,7 @@ public class ActionParser {
         return values;
     }
 
-    private String getElement(String componentName){
+    public String getElement(String componentName){
         Element component = (Element) actionElement.getElementsByTagName(componentName).item(0);
         Node entityNode = component.getElementsByTagName("entity").item(0);
         return entityNode !=null ? entityNode.getTextContent() : null;
@@ -90,5 +88,18 @@ public class ActionParser {
         for(String trigger: triggers){
             actionsList.addAction(trigger, gameAction);
         }
+    }
+
+    //for testing purposes
+    public NodeList getActions() {
+        return actions;
+    }
+
+    public void setActionElement(Element actionElement) {
+        this.actionElement = actionElement;
+    }
+
+    public int getNumActions() {
+        return numActions;
     }
 }

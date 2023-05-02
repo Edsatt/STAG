@@ -4,19 +4,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class BasicCommand {
-    private final String newLine = System.lineSeparator();
-    private final List<String> commandWords;
-    private final Map map;
-    private final PlayerCharacter player;
-    private Location currentLocation;
-    private final String subject;
+public class BasicCommand extends GameCommand{
+    private String subject;
 
-    public BasicCommand(ArrayList<String> commandWords, Map map, String subject){
-        this.commandWords = commandWords;
-        this.map = map;
-        this.player = map.getCurrentPlayer();
-        this.currentLocation = player.getLocation();
+    public BasicCommand(ArrayList<String> commandWords, Map map){
+        super(commandWords, map);
+    }
+
+    public void setSubject(String subject){
         this.subject = subject;
     }
 

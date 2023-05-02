@@ -35,6 +35,7 @@ public final class GameServer {
         entityParser.parse();
         entityParser.createLocations();
         actionParser.parse();
+        actionParser.createActions();
     }
 
     /**
@@ -50,7 +51,7 @@ public final class GameServer {
             String command = parts[1];
             map.selectPlayer(username);
             map.loadLocation();
-            GameCommand gc = new GameCommand(command);
+            GameCommandHandler gc = new GameCommandHandler(command);
             return gc.handleCommand(map);
         }else{
             return "Please enter a valid command";

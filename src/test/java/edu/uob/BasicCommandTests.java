@@ -8,11 +8,10 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class GameCommandTests {
+public class BasicCommandTests {
 
-    GameCommand command;
+    GameCommandHandler command;
     GameServer testServer;
     Map map;
     HashMap<String, PlayerCharacter> players;
@@ -23,48 +22,6 @@ public class GameCommandTests {
         File actionsFile = Paths.get("config" + File.separator + "basic-actions.xml").toAbsolutePath().toFile();
         testServer = new GameServer(entitiesFile, actionsFile);
         map = testServer.map;
-    }
-
-    @Test
-    void basicCommandCountTests(){
-        map.selectPlayer("ed");
-        command = new GameCommand("ed: inventory inv");
-        command.handleCommand(map);
-        assertEquals(command.basicCommandCount(), 2);
-        command = new GameCommand("ed: Inventory test");
-        command.handleCommand(map);
-        assertEquals(command.basicCommandCount(), 1);
-        command = new GameCommand("ed: get goto drop");
-        command.handleCommand(map);
-        assertEquals(command.basicCommandCount(), 3);
-        command = new GameCommand("ed: droop");
-        command.handleCommand(map);
-        assertEquals(command.basicCommandCount(), 0);
-        assertEquals(testServer.handleCommand("ed: inventory inv"), "Input cannot contain more than one command");
-    }
-
-    @Test
-    void subjectCountTests(){
-        map.selectPlayer("ed");
-        command = new GameCommand("ed: get key key");
-        command.handleCommand(map);
-        assertEquals(command.subjectCount(), 2);
-        command = new GameCommand("ed: get key axe");
-        command.handleCommand(map);
-        assertEquals(command.subjectCount(), 2);
-        command = new GameCommand("ed: get key");
-        command.handleCommand(map);
-        assertEquals(command.subjectCount(), 1);
-        assertEquals(command.getSubject(), "key");
-        command = new GameCommand("ed: inventory");
-        command.handleCommand(map);
-        assertEquals(command.subjectCount(), 0);
-        command = new GameCommand("ed: get bronze key");
-        command.handleCommand(map);
-        assertEquals(command.getSubject(), "key");
-        assertEquals(command.subjectCount(), 1);
-        String response = testServer.handleCommand("ed: key axe");
-        assertTrue(response.contains("Error"));
     }
 
     @Test
