@@ -11,11 +11,13 @@ public class Map {
     private final LinkedHashMap<String, Location> locations;
     private final HashMap<String, PlayerCharacter> players;
     private ArrayList<String> subjects;
+    private ActionsList actionsList;
 
     public Map(){
         this.locations = new LinkedHashMap<>();
         this.players = new HashMap<>();
         this.subjects = new ArrayList<>();
+        this.actionsList = new ActionsList();
     }
 
     public void setStartLocationKey(String key){
@@ -74,5 +76,9 @@ public class Map {
 
     public ArrayList<String> getSubjects() {
         return subjects;
+    }
+
+    public ActionsList getActionList(){
+        return this.actionsList;
     }
 }
