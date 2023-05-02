@@ -10,13 +10,15 @@ public class Map {
     private Location currentLocation;
     private final LinkedHashMap<String, Location> locations;
     private final HashMap<String, PlayerCharacter> players;
-    private ArrayList<String> subjects;
-    private ActionsList actionsList;
+    private final ArrayList<String> subjects;
+    private final ArrayList<String> triggers;
+    private final ActionsList actionsList;
 
     public Map(){
         this.locations = new LinkedHashMap<>();
         this.players = new HashMap<>();
         this.subjects = new ArrayList<>();
+        this.triggers = new ArrayList<>();
         this.actionsList = new ActionsList();
     }
 
@@ -26,6 +28,10 @@ public class Map {
 
     public void addSubjectKey(String key){
         subjects.add(key);
+    }
+
+    public void addTrigger(String trigger){
+        triggers.add(trigger);
     }
 
     public void selectPlayer(String username){
@@ -74,8 +80,12 @@ public class Map {
         return locations;
     }
 
-    public ArrayList<String> getSubjects() {
+    public ArrayList<String> getSubjectsList() {
         return subjects;
+    }
+
+    public ArrayList<String> getTriggersList(){
+        return triggers;
     }
 
     public ActionsList getActionList(){

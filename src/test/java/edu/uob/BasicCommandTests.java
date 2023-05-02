@@ -5,23 +5,18 @@ import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.nio.file.Paths;
-import java.util.HashMap;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class BasicCommandTests {
-
-    GameCommandHandler command;
     GameServer testServer;
     Map map;
-    HashMap<String, PlayerCharacter> players;
-    PlayerCharacter player;
     @BeforeEach
     void setup() {
         File entitiesFile = Paths.get("config" + File.separator + "basic-entities.dot").toAbsolutePath().toFile();
         File actionsFile = Paths.get("config" + File.separator + "basic-actions.xml").toAbsolutePath().toFile();
         testServer = new GameServer(entitiesFile, actionsFile);
-        map = testServer.map;
+        map = testServer.getMap();
     }
 
     @Test

@@ -3,19 +3,22 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class GameCommandHandler {
+public class CommandHandler {
     private Map map;
     private final String command;
-    private String subject;
+    private List<String> subjectList;
     private final List<String> commandWords;
+    private BasicCommand basicCommand;
+    private ActionCommand actionCommand;
 
-    public GameCommandHandler(String input) {
+    public CommandHandler(String input) {
         this.command = input.toLowerCase();
         this.commandWords = new ArrayList<>();
     }
 
     public String handleCommand(Map map) {
         this.map = map;
+        this.subjectList = new ArrayList<>();
         commandWords.addAll(Arrays.asList(command.split(" ")));
         String response = interpretCommand();
         if(response == null) {
@@ -28,10 +31,11 @@ public class GameCommandHandler {
     }
 
     public String subjectCheck(){
-        String response = "";
-        switch (subjectCount()){
-            case 0,1 -> response = basicCommandCheck();
-            case 2 -> response = "Error: Command cannot contain more than one subject";
+        String response;
+        if(subjectCount()<=1) {
+            response = basicCommandCheck();
+        }else{
+            response = handleActionCommand();
         }
         return response;
     }
@@ -39,7 +43,7 @@ public class GameCommandHandler {
     public int subjectCount(){
         int count = 0;
         StringBuilder subjects = new StringBuilder();
-        for(String subject: map.getSubjects()){
+        for(String subject: map.getSubjectsList()){
             subjects.append(subject).append("|");
         }
         subjects.deleteCharAt(subjects.length()-1);
@@ -48,24 +52,20 @@ public class GameCommandHandler {
         for(String word: commandWords){
             if(word.matches(regex)){
                 count ++;
-                setSubject(word);
+                subjectList.add(word);
             }
         }
         return count;
     }
 
-    private void setSubject(String subject){
-        this.subject = subject;
-    }
-
-    public String getSubject(){
-        return subject;
+    public ArrayList<String> getSubjectList(){
+        return (ArrayList<String>)subjectList;
     }
 
     private String basicCommandCheck() {
         String response = "";
         switch(basicCommandCount()){
-            case 0 -> response = null;
+            case 0 -> response = handleActionCommand();
             case 1 -> response = handleBasicCommand();
             case 2 -> response = "Input cannot contain more than one command";
         }
@@ -84,8 +84,24 @@ public class GameCommandHandler {
     }
 
     private String handleBasicCommand(){
-        BasicCommand basicCommand = new BasicCommand((ArrayList<String>) commandWords, map);
-        basicCommand.setSubject(subject);
+        basicCommand = new BasicCommand((ArrayList<String>) commandWords, map);
+        if(!subjectList.isEmpty()){
+            basicCommand.setSubject(subjectList.get(0));
+        }
         return basicCommand.handleBasicCommand();
+    }
+
+    private String handleActionCommand(){
+        actionCommand = new ActionCommand((ArrayList<String>)commandWords, map);
+        actionCommand.setSubjectList((ArrayList<String>)subjectList);
+        return actionCommand.handleActionCommand();
+    }
+
+    public BasicCommand getBasicCommand(){
+        return basicCommand;
+    }
+
+    public ActionCommand getActionCommand() {
+        return actionCommand;
     }
 }

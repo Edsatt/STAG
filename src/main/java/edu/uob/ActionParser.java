@@ -13,6 +13,7 @@ import java.io.File;
 import java.io.IOException;
 
 public class ActionParser {
+    private final Map map;
     private final File actionsFile;
     private final DocumentBuilder builder;
     private NodeList actions;
@@ -23,6 +24,7 @@ public class ActionParser {
     private final ActionsList actionsList;
 
     public ActionParser(Map map, File actionsFile){
+        this.map = map;
         this.actionsList = map.getActionList();
         this.actionsFile = actionsFile;
         try{
@@ -58,8 +60,15 @@ public class ActionParser {
                 gameAction.setConsumed(getElement("consumed"));
                 gameAction.setProduced(getElement("produced"));
                 gameAction.setNarration(getNarration());
+                addTriggersToMap();
                 addActionToList();
             }
+        }
+    }
+
+    public void addTriggersToMap(){
+        for(String trigger: triggers){
+            map.addTrigger(trigger);
         }
     }
 

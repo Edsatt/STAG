@@ -19,7 +19,7 @@ class MapTests {
         File entitiesFile = Paths.get("config" + File.separator + "basic-entities.dot").toAbsolutePath().toFile();
         File actionsFile = Paths.get("config" + File.separator + "basic-actions.xml").toAbsolutePath().toFile();
         testServer = new GameServer(entitiesFile, actionsFile);
-        map = testServer.map;
+        map = testServer.getMap();
         players = map.getPlayers();
     }
 

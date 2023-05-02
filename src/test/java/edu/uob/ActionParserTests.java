@@ -100,4 +100,14 @@ class ActionParserTests {
         gameAction = actionsList.getGameAction("open", subjectList);
         assertNull(gameAction, "gameAction should be null");
     }
+
+    @Test
+    void addTriggersToMapTests(){
+        ArrayList<String> triggers = map.getTriggersList();
+        assertTrue(triggers.isEmpty(), "triggers should be empty before creating actions");
+        actionParser.createActions();
+        triggers = map.getTriggersList();
+        assertEquals(9, triggers.size(), "there should only be 9 trigger phrases in this XML");
+        assertTrue(triggers.contains("unlock") && triggers.contains("cut down"), "expecting all keyphrases in triggers");
+    }
 }

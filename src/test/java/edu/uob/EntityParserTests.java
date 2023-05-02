@@ -5,8 +5,6 @@ import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -86,7 +84,7 @@ class EntityParserTests {
 //        String regex = "\\b("+String.join("|", subjects)+")\\b";
 
         StringBuilder subjects = new StringBuilder();
-        for(String subject: map.getSubjects()){
+        for(String subject: map.getSubjectsList()){
             subjects.append(subject).append("|");
         }
         subjects.deleteCharAt(subjects.length()-1);

@@ -9,7 +9,10 @@ import java.nio.file.Paths;
 public final class GameServer {
 
     private static final char END_OF_TRANSMISSION = 4;
-    public final Map map;
+    private final Map map;
+    private EntityParser entityParser;
+    private ActionParser actionParser;
+    private CommandHandler commandHandler;
 
     public static void main(String[] args) throws IOException {
         File entitiesFile = Paths.get("config" + File.separator + "extended-entities.dot").toAbsolutePath().toFile();
@@ -30,8 +33,8 @@ public final class GameServer {
     */
     public GameServer(File entitiesFile, File actionsFile){
         this.map = new Map();
-        EntityParser entityParser = new EntityParser(map, entitiesFile);
-        ActionParser actionParser = new ActionParser(map, actionsFile);
+        this.entityParser = new EntityParser(map, entitiesFile);
+        this.actionParser = new ActionParser(map, actionsFile);
         entityParser.parse();
         entityParser.createLocations();
         actionParser.parse();
@@ -51,8 +54,8 @@ public final class GameServer {
             String command = parts[1];
             map.selectPlayer(username);
             map.loadLocation();
-            GameCommandHandler gc = new GameCommandHandler(command);
-            return gc.handleCommand(map);
+            commandHandler = new CommandHandler(command);
+            return commandHandler.handleCommand(map);
         }else{
             return "Please enter a valid command";
         }
@@ -110,5 +113,17 @@ public final class GameServer {
 
     public Map getMap(){
         return map;
+    }
+
+    public EntityParser getEntityParser() {
+        return entityParser;
+    }
+
+    public ActionParser getActionParser() {
+        return actionParser;
+    }
+
+    public CommandHandler getCommandHandler() {
+        return commandHandler;
     }
 }
