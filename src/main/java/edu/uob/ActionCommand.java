@@ -19,15 +19,15 @@ public class ActionCommand extends GameCommand{
     }
 
     public String handleActionCommand(){
-        String response = "";
+        String response;
         if(!checkActionCommand()) {
             response = "Error: Command must contain one trigger phrase and at least one subject";
         }else if(!subjectsInScope()){
             response = "Error: Subjects must be either in your inventory or your current location";
         }else if(!findGameAction()){
             response = "Error: Ambiguous command not recognised";
-        }
-        return consumeEntity();
+        }else response = consumeEntity();
+        return response;
     }
 
     public boolean findGameAction(){
@@ -41,51 +41,86 @@ public class ActionCommand extends GameCommand{
         }
     }
 
-    /*
-    what if consumed or produced are null??
-     */
+    public boolean notHealthOrNull(String entityFate) {
+        switch (entityFate) {
+            case "consume" -> {
+                if (consumedEntity == null) return false;
+                if (consumedEntity.equals("health")) {
+                    handleHealth();
+                    return false;
+                }
+            }
+            case "produce" -> {
+                if (producedEntity == null) return false;
+                if (producedEntity.equals("health")) {
+                    handleHealth();
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 
     public String consumeEntity(){
-        String entityType = entityInLocation(consumedEntity);
-        if(entityType!=null){
-            GameEntity entity = currentLocation.consumeEntity(entityType, consumedEntity);
-            switch(entityType){
-                case "artefacts" ->{
-                    storeroom.addArtefact(consumedEntity, (Artefact)entity);
+        if(notHealthOrNull("consume")){
+            String entityType = entityInLocation(consumedEntity);
+            if(entityType!=null){
+                GameEntity entity = currentLocation.takeEntity(entityType, consumedEntity);
+                switch(entityType){
+                    case "artefacts" ->{
+                        storeroom.addArtefact(consumedEntity, (Artefact)entity);
+                    }
+                    case "furniture" ->{
+                        storeroom.addFurniture(consumedEntity, (Furniture)entity);
+                    }
+                    case "characters" ->
+                            storeroom.addNPC(consumedEntity, (NonPlayerCharacter)entity);
                 }
-                case "furniture" ->{
-                    storeroom.addFurniture(consumedEntity, (Furniture)entity);
-                }
-                case "characters" ->
-                    storeroom.addNPC(consumedEntity, (NonPlayerCharacter)entity);
+            }else if(entityInInventory(consumedEntity)){
+                Artefact item = player.dropItem(consumedEntity);
+                storeroom.addArtefact(consumedEntity, item);
+            }else{
+                return "Error: entity not found in current scope";
             }
-        }else if(entityInInventory(consumedEntity)){
-            Artefact item = player.dropItem(consumedEntity);
-            storeroom.addArtefact(consumedEntity, item);
-        }else{
-            return "Error: entity not found in current scope";
         }
         return produceEntity();
     }
 
     public String produceEntity(){
-        if(map.isLocation(producedEntity)){
-            currentLocation.addPath(producedEntity);
-        }else{
-            String entityType = storeroom.containsEntity(producedEntity);
-            GameEntity entity = storeroom.consumeEntity(entityType, producedEntity);
-            switch(entityType){
-                case "artefacts" ->{
-                    currentLocation.addArtefact(producedEntity, (Artefact)entity);
+        if(notHealthOrNull("produce")){
+            if(map.isLocation(producedEntity)){
+                currentLocation.addPath(producedEntity);
+            }else{
+                Location entityLocation = getEntityLocation(producedEntity);
+                String entityType = entityLocation.containsEntity(producedEntity);
+                GameEntity entity = entityLocation.takeEntity(entityType, producedEntity);
+                switch(entityType){
+                    case "artefacts" ->{
+                        currentLocation.addArtefact(producedEntity, (Artefact)entity);
+                    }
+                    case "furniture" ->{
+                        currentLocation.addFurniture(producedEntity, (Furniture)entity);
+                    }
+                    case "characters" ->
+                            currentLocation.addNPC(producedEntity, (NonPlayerCharacter)entity);
                 }
-                case "furniture" ->{
-                    currentLocation.addFurniture(producedEntity, (Furniture)entity);
-                }
-                case "characters" ->
-                        currentLocation.addNPC(producedEntity, (NonPlayerCharacter)entity);
             }
         }
         return narration;
+    }
+
+    public Location getEntityLocation(String entityKey){
+        Location entityLocation = null;
+        for(Location location: map.getLocations().values()){
+            if(location.containsEntity(entityKey)!=null){
+                entityLocation = location;
+            }
+        }
+        return entityLocation;
+    }
+
+    public void handleHealth(){
+        System.out.println("Helth");
     }
 
     //checks that command contains one trigger and at least one subject
@@ -95,15 +130,8 @@ public class ActionCommand extends GameCommand{
 
     public boolean checkTriggers(){
         int count=0;
-        StringBuilder sb = new StringBuilder();
-        for(String trigger: triggerList){
-            sb.append(trigger).append("|");
-        }
-        sb.deleteCharAt(sb.length()-1);
-        String regex = "\\b("+sb+")\\b";
-
         for(String word: commandWords){
-            if(word.matches(regex)){
+            if(word.matches(GameServer.generateRegex(triggerList))){
                 count++;
                 this.trigger = word;
             }

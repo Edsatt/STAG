@@ -4,6 +4,7 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 
 /** This class implements the STAG server. */
 public final class GameServer {
@@ -109,6 +110,15 @@ public final class GameServer {
                 writer.flush();
             }
         }
+    }
+
+    public static String generateRegex(ArrayList<String> list){
+        StringBuilder sb = new StringBuilder();
+        for(String entity: list){
+            sb.append(entity).append("|");
+        }
+        sb.deleteCharAt(sb.length()-1);
+        return "\\b("+sb+")\\b";
     }
 
     public Map getMap(){

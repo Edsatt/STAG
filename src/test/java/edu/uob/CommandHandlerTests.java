@@ -52,13 +52,13 @@ public class CommandHandlerTests {
         command = new CommandHandler("ed: get key");
         command.handleCommand(map);
         assertEquals(command.subjectCount(), 1);
-        assertEquals(command.getSubjectList().get(0), "key");
+        assertEquals(command.getCommandSubjects().get(0), "key");
         command = new CommandHandler("ed: inventory");
         command.handleCommand(map);
         assertEquals(command.subjectCount(), 0);
         command = new CommandHandler("ed: get bronze key");
         command.handleCommand(map);
-        assertEquals(command.getSubjectList().get(0), "key");
+        assertEquals(command.getCommandSubjects().get(0), "key");
         assertEquals(command.subjectCount(), 1);
         String response = testServer.handleCommand("ed: key axe");
         assertTrue(response.contains("Error"));

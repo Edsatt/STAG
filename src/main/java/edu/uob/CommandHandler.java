@@ -1,12 +1,13 @@
 package edu.uob;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class CommandHandler {
     private Map map;
     private final String command;
-    private List<String> subjectList;
+    private List<String> commandSubjects;
     private final List<String> commandWords;
     private BasicCommand basicCommand;
     private ActionCommand actionCommand;
@@ -18,12 +19,36 @@ public class CommandHandler {
 
     public String handleCommand(Map map) {
         this.map = map;
-        this.subjectList = new ArrayList<>();
-        commandWords.addAll(Arrays.asList(command.split(" ")));
+        this.commandSubjects = new ArrayList<>();
+        tokenizeCommand();
         String response = interpretCommand();
         if(response == null) {
             return "Error: Please enter a valid command";
         }else return response;
+    }
+
+    public void tokenizeCommand(){
+        for(String basicCommand: map.getCommands()){
+            addEntitiesToArray(basicCommand);
+        }
+        for(String subject: map.getSubjectsList()){
+            addEntitiesToArray(subject);
+        }
+        for(String trigger: map.getTriggersList()){
+            addEntitiesToArray(trigger);
+        }
+    }
+
+    public void addEntitiesToArray(String entity){
+        Pattern entityPattern = Pattern.compile("\\b("+entity+")\\b");
+        Matcher countEntityMatches = entityPattern.matcher(command);
+        int count = 0;
+        while(countEntityMatches.find()){
+            count++;
+        }
+        for(int i=0; i<count; i++){
+            commandWords.add(entity);
+        }
     }
 
     private String interpretCommand(){
@@ -42,24 +67,17 @@ public class CommandHandler {
 
     public int subjectCount(){
         int count = 0;
-        StringBuilder subjects = new StringBuilder();
-        for(String subject: map.getSubjectsList()){
-            subjects.append(subject).append("|");
-        }
-        subjects.deleteCharAt(subjects.length()-1);
-        String regex = "\\b("+subjects+")\\b";
-
         for(String word: commandWords){
-            if(word.matches(regex)){
+            if(word.matches(GameServer.generateRegex(map.getSubjectsList()))){
                 count ++;
-                subjectList.add(word);
+                commandSubjects.add(word);
             }
         }
         return count;
     }
 
-    public ArrayList<String> getSubjectList(){
-        return (ArrayList<String>)subjectList;
+    public ArrayList<String> getCommandSubjects(){
+        return (ArrayList<String>) commandSubjects;
     }
 
     private String basicCommandCheck() {
@@ -73,10 +91,9 @@ public class CommandHandler {
     }
 
     public int basicCommandCount() {
-        String regex = "\\b(inventory|inv|get|drop|goto|look)\\b";
         int count = 0;
         for (String word : commandWords) {
-            if (word.matches(regex)) {
+            if (word.matches("\\b(inventory|inv|get|drop|goto|look)\\b")) {
                 count++;
             }
         }
@@ -85,15 +102,15 @@ public class CommandHandler {
 
     private String handleBasicCommand(){
         basicCommand = new BasicCommand((ArrayList<String>) commandWords, map);
-        if(!subjectList.isEmpty()){
-            basicCommand.setSubject(subjectList.get(0));
+        if(!commandSubjects.isEmpty()){
+            basicCommand.setSubject(commandSubjects.get(0));
         }
         return basicCommand.handleBasicCommand();
     }
 
     private String handleActionCommand(){
         actionCommand = new ActionCommand((ArrayList<String>)commandWords, map);
-        actionCommand.setSubjectList((ArrayList<String>)subjectList);
+        actionCommand.setSubjectList((ArrayList<String>) commandSubjects);
         return actionCommand.handleActionCommand();
     }
 

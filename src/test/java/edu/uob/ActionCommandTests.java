@@ -16,7 +16,7 @@ public class ActionCommandTests {
     @BeforeEach
     void setup() {
         File entitiesFile = Paths.get("config" + File.separator + "extended-entities.dot").toAbsolutePath().toFile();
-        File actionsFile = Paths.get("config" + File.separator + "basic-actions.xml").toAbsolutePath().toFile();
+        File actionsFile = Paths.get("config" + File.separator + "extended-actions.xml").toAbsolutePath().toFile();
         testServer = new GameServer(entitiesFile, actionsFile);
         map = testServer.getMap();
     }
@@ -30,6 +30,13 @@ public class ActionCommandTests {
         actionCommand = testServer.getCommandHandler().getActionCommand();
         assertNull(actionCommand.getTrigger(),"trigger should not be set");
         assertTrue(response.contains("Error"), "response should contain an error");
+    }
+
+    @Test
+    void triggerTests2(){
+        testServer.handleCommand("ed: cut down tree");
+        actionCommand = testServer.getCommandHandler().getActionCommand();
+        assertEquals("cut down", actionCommand.getTrigger(),"trigger should be cut down");
     }
 
     @Test
@@ -97,11 +104,11 @@ public class ActionCommandTests {
 
     @Test
     void consumedEntityTests(){
+        testServer.handleCommand("ed: look");
+        assertNull(map.getLocation("storeroom").containsEntity("potion"), "storeroom should not contain potion");
         testServer.handleCommand("ed: drink potion");
         actionCommand = testServer.getCommandHandler().getActionCommand();
         assertEquals("potion",actionCommand.getConsumedEntity(), "potion should be stored as consumed entity");
-        assertNull(map.getLocation("storeroom").containsEntity("potion"), "storeroom should not contain potion");
-        actionCommand.consumeEntity();
         assertNull(map.getCurrentLocation().containsEntity("potion"), "current location should no longer contain the potion");
         assertEquals("artefacts", map.getLocation("storeroom").containsEntity("potion"),"storeroom should now contain potion");
     }

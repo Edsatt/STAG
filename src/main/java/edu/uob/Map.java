@@ -10,6 +10,7 @@ public class Map {
     private Location currentLocation;
     private final LinkedHashMap<String, Location> locations;
     private final HashMap<String, PlayerCharacter> players;
+    private final String [] commands;
     private final ArrayList<String> subjects;
     private final ArrayList<String> triggers;
     private final ActionsList actionsList;
@@ -17,6 +18,7 @@ public class Map {
     public Map(){
         this.locations = new LinkedHashMap<>();
         this.players = new HashMap<>();
+        this.commands = new String []{"inventory", "inv", "look", "get", "goto", "drop"};
         this.subjects = new ArrayList<>();
         this.triggers = new ArrayList<>();
         this.actionsList = new ActionsList();
@@ -86,6 +88,10 @@ public class Map {
 
     public ArrayList<String> getTriggersList(){
         return triggers;
+    }
+
+    public String[] getCommands() {
+        return commands;
     }
 
     public GameAction getGameAction(String trigger, ArrayList<String> subjects){

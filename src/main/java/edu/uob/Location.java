@@ -106,7 +106,7 @@ public class Location {
         else return null;
     }
 
-    public GameEntity consumeEntity(String entityType, String key){
+    public GameEntity takeEntity(String entityType, String key){
         GameEntity entity = null;
         switch (entityType){
             case "artefacts" -> {
