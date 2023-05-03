@@ -1,8 +1,6 @@
 package edu.uob;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
+import java.util.*;
 
 public class Map {
     private String startLocationKey;
@@ -13,14 +11,16 @@ public class Map {
     private final String [] commands;
     private final ArrayList<String> subjects;
     private final ArrayList<String> triggers;
+    private final HashSet<List<String>> triggerGroups;
     private final ActionsList actionsList;
 
     public Map(){
         this.locations = new LinkedHashMap<>();
         this.players = new HashMap<>();
-        this.commands = new String []{"inventory", "inv", "look", "get", "goto", "drop"};
+        this.commands = new String []{"inventory", "inv", "look", "get", "goto", "drop", "health"};
         this.subjects = new ArrayList<>();
         this.triggers = new ArrayList<>();
+        this.triggerGroups = new HashSet<>();
         this.actionsList = new ActionsList();
     }
 
@@ -36,6 +36,19 @@ public class Map {
         triggers.add(trigger);
     }
 
+    public void addTriggerGroup(String[] triggerGroup){
+        triggerGroups.add(Arrays.stream(triggerGroup).toList());
+    }
+
+    public List<String> getTriggerGroup(String trigger){
+        for(List<String> triggerGroup: triggerGroups){
+            if(triggerGroup.contains(trigger)){
+                return triggerGroup;
+            }
+        }
+        return null;
+    }
+
     public void selectPlayer(String username){
         if(!players.containsKey(username)){
             setupNewPlayer(username);
@@ -45,7 +58,6 @@ public class Map {
 
     public void setupNewPlayer(String username){
         PlayerCharacter player = new PlayerCharacter(username);
-        player.setAliveStatus(true);
         players.put(username, player);
         player.setLocation(locations.get(startLocationKey));
     }
@@ -56,6 +68,16 @@ public class Map {
 
     public void addLocation(String id, Location location){
         locations.put(id, location);
+    }
+
+    public void killPlayer(){
+        HashMap<String, Artefact> inventory = currentPlayer.getInventory();
+        for(String key: inventory.keySet()){
+            GameEntity item = currentPlayer.takeItemFromInventory(key);
+            currentPlayer.getLocation().addEntity("artefacts",key,item);
+        }
+        currentPlayer.setLocation(locations.get(startLocationKey));
+        currentPlayer.resetHealth();
     }
 
     public PlayerCharacter getCurrentPlayer(){

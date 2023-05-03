@@ -2,7 +2,6 @@ package edu.uob;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class BasicCommand extends GameCommand{
     private String subject;
@@ -24,6 +23,7 @@ public class BasicCommand extends GameCommand{
                 case "goto" -> response = handleGotoCommand();
                 case "get" -> response = handleGetCommand();
                 case "look" -> response = handleLookCommand();
+                case "health" -> response = handleHealthCommand();
             }
         }
         return response;
@@ -56,11 +56,11 @@ public class BasicCommand extends GameCommand{
     }
 
     private String handleDropCommand() {
-        Artefact item = player.dropItem(subject);
+        Artefact item = player.takeItemFromInventory(subject);
         if(subject == null || item==null){
             return ("Error: Cannot drop an item is not in your inventory");
         }else{
-            currentLocation.addArtefact(subject, item);
+            currentLocation.addEntity("artefacts",subject, item);
             return ("You drop the "+item.getDescription());
         }
     }
@@ -94,5 +94,10 @@ public class BasicCommand extends GameCommand{
             response.append(path).append(newLine);
         }
         return response.toString();
+    }
+
+    private String handleHealthCommand() {
+        if(subject!=null) return "Error: Health command cannot contain any subjects";
+        return "Your health is "+player.getHealth()+"/3";
     }
 }

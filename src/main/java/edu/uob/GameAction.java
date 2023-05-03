@@ -11,23 +11,16 @@ public class GameAction
     private String produced;
     private String narration;
     public GameAction(){
-        subjects = new ArrayList<>();
     }
 
     public void setSubjects(String[] subjectArray) {
-        this.subjects = Arrays.stream(subjectArray).toList();
+        subjects = new ArrayList<>();
+        subjects.addAll(Arrays.stream(subjectArray).toList());
     }
 
     public boolean checkSubjects(ArrayList<String> querySubjects){
-        StringBuilder sb = new StringBuilder();
-        for(String s: this.subjects){
-            sb.append(s).append("|");
-        }
-        sb.deleteCharAt(sb.length()-1);
-        String regex = "\\b("+sb+")\\b";
-
         for(String subject: querySubjects){
-            if (!subject.matches(regex)) {
+            if (!subjects.contains(subject)){
                 return false;
             }
         }
@@ -45,8 +38,6 @@ public class GameAction
     public void setNarration(String narration) {
         this.narration = narration;
     }
-
-
 
     public List<String> getSubjects() {
         return subjects;

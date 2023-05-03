@@ -93,7 +93,7 @@ public class CommandHandler {
     public int basicCommandCount() {
         int count = 0;
         for (String word : commandWords) {
-            if (word.matches("\\b(inventory|inv|get|drop|goto|look)\\b")) {
+            if (word.matches("\\b(inventory|inv|get|drop|goto|look|health)\\b")) {
                 count++;
             }
         }

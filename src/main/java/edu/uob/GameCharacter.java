@@ -1,13 +1,12 @@
 package edu.uob;
 
 public abstract class GameCharacter extends GameEntity{
-    private Boolean alive;
 
-    public void setAliveStatus(Boolean alive){
-        this.alive = alive;
+    private String description;
+    public void setDescription(String description) {
+        this.description = description;
     }
-
-    public Boolean isAlive(){
-        return alive;
+    public String getDescription() {
+        return description;
     }
 }

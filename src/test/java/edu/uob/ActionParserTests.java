@@ -110,4 +110,14 @@ class ActionParserTests {
         assertEquals(9, triggers.size(), "there should only be 9 trigger phrases in this XML");
         assertTrue(triggers.contains("unlock") && triggers.contains("cut down"), "expecting all keyphrases in triggers");
     }
+
+    @Test
+    void addTriggersToGameActionTests(){
+        actionParser.createActions();
+        subjectList.addAll(List.of("tree", "axe"));
+        List<String> triggers = map.getTriggerGroup("cut");
+        assertEquals(3, triggers.size(), "only three triggers for this action");
+        assertTrue(triggers.contains("cut") && triggers.contains("cut down") && triggers.contains("chop"),"Should contain all three triggers");
+
+    }
 }

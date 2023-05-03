@@ -6,7 +6,7 @@ import java.util.HashSet;
 
 public class ActionsList {
 
-    private HashMap<String, HashSet<GameAction>> actions;
+    private final HashMap<String, HashSet<GameAction>> actions;
 
     public ActionsList(){
         actions = new HashMap<>();

@@ -70,6 +70,7 @@ public class ActionParser {
         for(String trigger: triggers){
             map.addTrigger(trigger);
         }
+        map.addTriggerGroup(triggers);
     }
 
     public String [] getElements(String componentName, String elementName){

@@ -85,4 +85,10 @@ public class BasicCommandTests {
         String response3 = testServer.handleCommand("ed: goto cabin axe");
         assertTrue(response3.contains("Error"));
     }
+
+    @Test
+    void testHealthCommand(){
+        String response1 = testServer.handleCommand("ed: health");
+        assertTrue(response1.contains("3/3"), "health should be full");
+    }
 }

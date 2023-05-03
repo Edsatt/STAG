@@ -33,7 +33,6 @@ public class Location {
             case "characters" -> {
                 NonPlayerCharacter npc = new NonPlayerCharacter();
                 npc.setDescription(description);
-                npc.setAliveStatus(true);
                 characters.put(id, npc);
             }
             case "artefacts" -> {
@@ -51,6 +50,14 @@ public class Location {
 
     public void addPath(String path){
         paths.add(path);
+    }
+
+    public void addEntity(String destination, String id, GameEntity item){
+        switch(destination){
+            case "artefacts" -> artefacts.put(id, (Artefact)item);
+            case "furniture" -> furniture.put(id, (Furniture)item);
+            case "characters" -> characters.put(id, (NonPlayerCharacter)item);
+        }
     }
 
     public void addArtefact(String id, Artefact item){

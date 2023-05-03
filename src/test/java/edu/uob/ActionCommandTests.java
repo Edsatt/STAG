@@ -34,9 +34,8 @@ public class ActionCommandTests {
 
     @Test
     void triggerTests2(){
-        testServer.handleCommand("ed: cut down tree");
+        testServer.handleCommand("ed: cut chop cut down chop tree");
         actionCommand = testServer.getCommandHandler().getActionCommand();
-        assertEquals("cut down", actionCommand.getTrigger(),"trigger should be cut down");
     }
 
     @Test

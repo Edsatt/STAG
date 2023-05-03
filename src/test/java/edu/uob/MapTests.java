@@ -37,8 +37,8 @@ class MapTests {
         testServer.handleCommand("ed: inventory");
         assertTrue(players.containsKey("ed") && players.containsKey("isobel"));
         assertEquals(players.size(), 2);
-        assertTrue(players.get("ed").isAlive());
-        assertTrue(players.get("isobel").isAlive());
+        assertFalse(players.get("ed").isDead());
+        assertFalse(players.get("isobel").isDead());
         assertTrue(players.get("ed").getInventory().isEmpty());
     }
 
@@ -58,6 +58,19 @@ class MapTests {
         assertNotEquals(map.getCurrentLocation().getId(), "forest");
         testServer.handleCommand("ed: look");
         assertEquals(map.getCurrentLocation().getId(), "forest");
+    }
+
+    @Test
+    void killPlayerTests(){
+        testServer.handleCommand("ed: get axe");
+        testServer.handleCommand("ed: goto forest");
+        PlayerCharacter ed = map.getCurrentPlayer();
+        assertFalse(ed.getInventory().isEmpty(), "inventory should have contain the axe");
+        assertEquals("forest", ed.getLocation().getId(), "player should be in forest");
+        map.killPlayer();
+        assertTrue(ed.getInventory().isEmpty(),"inventory should reset");
+        assertTrue(map.getLocation("forest").getArtefacts().containsKey("axe"),"forest should now contain the axe");
+        assertEquals("cabin", ed.getLocation().getId(), "player should have reset at the cabin");
     }
 
     @ParameterizedTest

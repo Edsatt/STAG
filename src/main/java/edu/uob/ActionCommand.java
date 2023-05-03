@@ -1,13 +1,13 @@
 package edu.uob;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ActionCommand extends GameCommand{
     private final ArrayList<String> triggerList;
     private ArrayList<String> subjectList;
     private String trigger;
-    private GameAction gameAction;
-    private Location storeroom;
+    private final Location storeroom;
     private String producedEntity;
     private String consumedEntity;
     private String narration;
@@ -30,9 +30,43 @@ public class ActionCommand extends GameCommand{
         return response;
     }
 
+    //checks that command contains one trigger and at least one subject
+    public boolean checkActionCommand(){
+        return(checkTriggers() && !isSubjectListEmpty());
+    }
+
+    public boolean checkTriggers(){
+        List<String> triggers = new ArrayList<>();
+        for(String word: commandWords){
+            if(triggerList.contains(word)){
+                triggers.add(word);
+            }
+        }
+        if(triggers.isEmpty()){
+            return false;
+        }
+        return checkTriggersMatchAction(triggers);
+    }
+
+    public boolean checkTriggersMatchAction(List<String> triggers){
+        List<String> triggerGroup = map.getTriggerGroup(triggers.get(0));
+        for(String trigger: triggers){
+            if(!triggerGroup.contains(trigger)){
+                return false;
+            }
+        }
+        this.trigger = triggers.get(0);
+        return true;
+    }
+
+
+    public boolean isSubjectListEmpty(){
+        return subjectList.isEmpty();
+    }
+
     public boolean findGameAction(){
-        this.gameAction = map.getGameAction(trigger, subjectList);
-        if(gameAction==null) return false;
+        GameAction gameAction = map.getGameAction(trigger, subjectList);
+        if(gameAction ==null) return false;
         else {
             this.consumedEntity = gameAction.getConsumed();
             this.producedEntity = gameAction.getProduced();
@@ -41,44 +75,17 @@ public class ActionCommand extends GameCommand{
         }
     }
 
-    public boolean notHealthOrNull(String entityFate) {
-        switch (entityFate) {
-            case "consume" -> {
-                if (consumedEntity == null) return false;
-                if (consumedEntity.equals("health")) {
-                    handleHealth();
-                    return false;
-                }
-            }
-            case "produce" -> {
-                if (producedEntity == null) return false;
-                if (producedEntity.equals("health")) {
-                    handleHealth();
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
     public String consumeEntity(){
         if(notHealthOrNull("consume")){
             String entityType = entityInLocation(consumedEntity);
             if(entityType!=null){
                 GameEntity entity = currentLocation.takeEntity(entityType, consumedEntity);
-                switch(entityType){
-                    case "artefacts" ->{
-                        storeroom.addArtefact(consumedEntity, (Artefact)entity);
-                    }
-                    case "furniture" ->{
-                        storeroom.addFurniture(consumedEntity, (Furniture)entity);
-                    }
-                    case "characters" ->
-                            storeroom.addNPC(consumedEntity, (NonPlayerCharacter)entity);
-                }
+                storeroom.addEntity(entityType,consumedEntity,entity);
+
             }else if(entityInInventory(consumedEntity)){
-                Artefact item = player.dropItem(consumedEntity);
-                storeroom.addArtefact(consumedEntity, item);
+                Artefact item = player.takeItemFromInventory(consumedEntity);
+                storeroom.addEntity("artefacts", consumedEntity, item);
+
             }else{
                 return "Error: entity not found in current scope";
             }
@@ -94,19 +101,34 @@ public class ActionCommand extends GameCommand{
                 Location entityLocation = getEntityLocation(producedEntity);
                 String entityType = entityLocation.containsEntity(producedEntity);
                 GameEntity entity = entityLocation.takeEntity(entityType, producedEntity);
-                switch(entityType){
-                    case "artefacts" ->{
-                        currentLocation.addArtefact(producedEntity, (Artefact)entity);
-                    }
-                    case "furniture" ->{
-                        currentLocation.addFurniture(producedEntity, (Furniture)entity);
-                    }
-                    case "characters" ->
-                            currentLocation.addNPC(producedEntity, (NonPlayerCharacter)entity);
-                }
+                currentLocation.addEntity(entityType, producedEntity, entity);
             }
         }
         return narration;
+    }
+
+    public boolean notHealthOrNull(String entityFate){
+        String entity = switch (entityFate){
+            case "consume" -> consumedEntity;
+            case "produce" -> producedEntity;
+            default -> null;
+        };
+        if(entity==null) return false;
+        else if(entity.equals("health")){
+            handleHealth(entityFate);
+            return false;
+        }
+        return true;
+    }
+    public void handleHealth(String effect){
+        switch(effect){
+            case "consume" -> player.decreaseHealth();
+            case "produce" -> player.addHealth();
+        }
+        if(player.isDead()){
+            map.killPlayer();
+            narration = "You have died and lost all your items. You must return to the game's start location";
+        }
     }
 
     public Location getEntityLocation(String entityKey){
@@ -117,30 +139,6 @@ public class ActionCommand extends GameCommand{
             }
         }
         return entityLocation;
-    }
-
-    public void handleHealth(){
-        System.out.println("Helth");
-    }
-
-    //checks that command contains one trigger and at least one subject
-    public boolean checkActionCommand(){
-        return(checkTriggers() && !isSubjectListEmpty());
-    }
-
-    public boolean checkTriggers(){
-        int count=0;
-        for(String word: commandWords){
-            if(word.matches(GameServer.generateRegex(triggerList))){
-                count++;
-                this.trigger = word;
-            }
-        }
-        return count==1;
-    }
-
-    public boolean isSubjectListEmpty(){
-        return subjectList.isEmpty();
     }
 
     //Checks that each subject is in either the inventory or location
