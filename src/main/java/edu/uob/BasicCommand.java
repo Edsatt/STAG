@@ -67,6 +67,7 @@ public class BasicCommand extends GameCommand{
 
     private String handleGotoCommand(){
         if(currentLocation.checkPaths(subject)){
+            currentLocation.removePlayerCharacter(player);
             currentLocation = map.getLocation(subject);
             player.setLocation(currentLocation);
             return "You travel to the " +currentLocation.getId();
@@ -86,7 +87,7 @@ public class BasicCommand extends GameCommand{
         for(Furniture item: currentLocation.getFurniture().values()){
             response.append(item.getDescription()).append(newLine);
         }
-        for(NonPlayerCharacter character: currentLocation.getCharacters().values()){
+        for(GameCharacter character: currentLocation.getCharacters().values()){
             response.append(character.getDescription()).append(newLine);
         }
         response.append("You can access from here: ").append(newLine);

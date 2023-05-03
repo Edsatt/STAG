@@ -71,12 +71,26 @@ class MapTests {
         assertTrue(ed.getInventory().isEmpty(),"inventory should reset");
         assertTrue(map.getLocation("forest").getArtefacts().containsKey("axe"),"forest should now contain the axe");
         assertEquals("cabin", ed.getLocation().getId(), "player should have reset at the cabin");
+        assertFalse(map.getLocation("forest").getCharacters().containsKey("ed"), "player ed should be removed from location when dead");
     }
 
     @ParameterizedTest
     @ValueSource(strings = {"cellar","cabin","forest","clearing","riverbank"})
     void isLocationTests(String location){
         assertTrue(map.isLocation(location),location+" should return true");
+    }
+
+    @Test
+    void roomsContainPlayersTests(){
+        testServer.handleCommand("ed: look");
+        testServer.handleCommand("isobel: look");
+        assertTrue(map.getLocation("cabin").getCharacters().containsKey("ed"), "cabin should contain player ed");
+        assertTrue(map.getLocation("cabin").getCharacters().containsKey("isobel"), "cabin should contain player isobel");
+        assertEquals(2, map.getLocation("cabin").getCharacters().size(), "cabin should contain 2 players");
+        testServer.handleCommand("ed: goto forest");
+        assertTrue(map.getLocation("cabin").getCharacters().containsKey("isobel"), "cabin should still contain player isobel");
+        assertEquals(1, map.getLocation("cabin").getCharacters().size(),"cabin should only contain one player");
+
     }
 }
 

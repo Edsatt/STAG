@@ -11,6 +11,7 @@ public class PlayerCharacter extends GameCharacter {
     
     public PlayerCharacter(String username){
         this.username = username;
+        setDescription(username);
         this.inventory = new HashMap<>();
         this.health = 3;
         this.dead = false;
@@ -18,6 +19,7 @@ public class PlayerCharacter extends GameCharacter {
 
     public void setLocation(Location location){
         this.location = location;
+        location.addPlayerCharacter(this);
     }
 
     public Location getLocation() {

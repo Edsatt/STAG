@@ -76,6 +76,7 @@ public class Map {
             GameEntity item = currentPlayer.takeItemFromInventory(key);
             currentPlayer.getLocation().addEntity("artefacts",key,item);
         }
+        currentLocation.removePlayerCharacter(currentPlayer);
         currentPlayer.setLocation(locations.get(startLocationKey));
         currentPlayer.resetHealth();
     }

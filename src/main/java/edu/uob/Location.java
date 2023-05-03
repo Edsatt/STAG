@@ -7,7 +7,7 @@ public class Location {
     private boolean storeroom;
     private final String id;
     private String description;
-    private final HashMap<String, NonPlayerCharacter> characters;
+    private final HashMap<String, GameCharacter> characters;
     private final HashMap<String, Artefact> artefacts;
     private final HashMap<String, Furniture> furniture;
     private final HashSet<String> paths;
@@ -52,21 +52,21 @@ public class Location {
         paths.add(path);
     }
 
-    public void addEntity(String destination, String id, GameEntity item){
-        switch(destination){
-            case "artefacts" -> artefacts.put(id, (Artefact)item);
-            case "furniture" -> furniture.put(id, (Furniture)item);
-            case "characters" -> characters.put(id, (NonPlayerCharacter)item);
+    public void addEntity(String destination, String id, GameEntity item) {
+        switch (destination) {
+            case "artefacts" -> artefacts.put(id, (Artefact) item);
+            case "furniture" -> furniture.put(id, (Furniture) item);
+            case "characters" -> characters.put(id, (NonPlayerCharacter) item);
         }
     }
 
-    public void addArtefact(String id, Artefact item){
-        artefacts.put(id, item);
+    public void addPlayerCharacter(PlayerCharacter player){
+        characters.put(player.getUsername(), player);
     }
 
-    public void addFurniture(String id, Furniture item) {furniture.put(id, item);}
-
-    public void addNPC(String name, NonPlayerCharacter npc) {characters.put(name, npc);}
+    public void removePlayerCharacter(PlayerCharacter player){
+        characters.remove(player.getUsername());
+    }
 
     public String getId(){
         return id;
@@ -90,7 +90,7 @@ public class Location {
         return item;
     }
 
-    public HashMap<String, NonPlayerCharacter> getCharacters() {
+    public HashMap<String, GameCharacter> getCharacters() {
         return characters;
     }
 
