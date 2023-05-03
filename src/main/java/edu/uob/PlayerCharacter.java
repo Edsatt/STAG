@@ -28,6 +28,10 @@ public class PlayerCharacter extends GameCharacter {
         inventory.put(id, item);
     }
 
+    public boolean isItemInventory(String id){
+        return(inventory.containsKey(id));
+    }
+
     public Artefact dropItem(String id){
         Artefact item = null;
         if(inventory.containsKey(id)){

@@ -15,7 +15,7 @@ class EntityParserTests {
     HashMap<String, Location> locations;
     @BeforeEach
     void setup() {
-        File entitiesFile = Paths.get("config" + File.separator + "basic-entities.dot").toAbsolutePath().toFile();
+        File entitiesFile = Paths.get("config" + File.separator + "extended-entities.dot").toAbsolutePath().toFile();
         map = new Map();
         locations = map.getLocations();
         EntityParser entityParser = new EntityParser(map, entitiesFile);
@@ -26,72 +26,66 @@ class EntityParserTests {
     @Test
     void mapTests(){
         //Check that map contains all locations from the entity file
-        assertEquals(locations.size(), 4);
+        assertEquals(6, locations.size());
         assertTrue(locations.containsKey("cabin"));
         assertTrue(locations.containsKey("forest"));
         assertTrue(locations.containsKey("cellar"));
         assertTrue(locations.containsKey("storeroom"));
+        assertTrue(locations.containsKey("clearing"));
+        assertTrue(locations.containsKey("riverbank"));
     }
 
+    //Check that each location contains the correct description, entities and paths
     @Test
-    void locationTests(){
-        //Check that each location contains the correct description, entities and paths
+    void cellarTests(){
         Location cellar = locations.get("cellar");
         assertEquals(cellar.getDescription(), "A dusty cellar");
         assertTrue(cellar.getArtefacts().isEmpty());
         assertTrue(cellar.getFurniture().isEmpty());
         assertTrue(cellar.getCharacters().containsKey("elf"));
-        assertEquals(cellar.getCharacters().get("elf").getDescription(), "Angry Elf");
+        assertEquals(cellar.getCharacters().get("elf").getDescription(), "An angry looking Elf");
         assertTrue(cellar.getPaths().contains("cabin"));
         assertFalse(cellar.isStoreroom());
+    }
 
+    @Test
+    void cabinTests(){
         Location cabin = locations.get("cabin");
         assertEquals(cabin.getDescription(), "A log cabin in the woods");
         assertTrue(cabin.getCharacters().isEmpty());
         assertTrue(cabin.getArtefacts().containsKey("potion"));
-        assertEquals(cabin.getArtefacts().get("potion").getDescription(), "Magic potion");
+        assertEquals(cabin.getArtefacts().get("potion").getDescription(), "A bottle of magic potion");
         assertTrue(cabin.getArtefacts().containsKey("axe"));
-        assertEquals(cabin.getArtefacts().get("axe").getDescription(), "Shiny axe");
+        assertEquals(cabin.getArtefacts().get("axe").getDescription(), "A razor sharp axe");
         assertTrue(cabin.getFurniture().containsKey("trapdoor"));
-        assertEquals(cabin.getFurniture().get("trapdoor").getDescription(), "Wooden trapdoor");
+        assertEquals(cabin.getFurniture().get("trapdoor").getDescription(), "A locked wooden trapdoor in the floor");
         assertTrue(cabin.getPaths().contains("forest"));
         assertFalse(cabin.isStoreroom());
+    }
 
+    @Test
+    void forestTests(){
         Location forest = locations.get("forest");
-        assertEquals(forest.getDescription(), "A dark forest");
+        assertEquals(forest.getDescription(), "A deep dark forest");
         assertTrue(forest.getCharacters().isEmpty());
         assertTrue(forest.getArtefacts().containsKey("key"));
-        assertEquals(forest.getArtefacts().get("key").getDescription(), "Brass key");
+        assertEquals(forest.getArtefacts().get("key").getDescription(), "A rusty old key");
         assertTrue(forest.getFurniture().containsKey("tree"));
-        assertEquals(forest.getFurniture().get("tree").getDescription(), "A big tree");
+        assertEquals(forest.getFurniture().get("tree").getDescription(), "A tall pine tree");
         assertTrue(forest.getPaths().contains("cabin"));
         assertFalse(forest.isStoreroom());
-
-        Location storeroom = locations.get("storeroom");
-        assertEquals(storeroom.getDescription(), "Storage for any entities not placed in the game");
-        assertTrue(storeroom.getCharacters().isEmpty());
-        assertTrue(storeroom.getFurniture().isEmpty());
-        assertTrue(storeroom.getArtefacts().containsKey("log"));
-        assertEquals(storeroom.getArtefacts().get("log").getDescription(), "A heavy wooden log");
-        assertTrue(storeroom.getPaths().isEmpty());
-        assertTrue(storeroom.isStoreroom());
-
-//        ArrayList<String> subjectList = map.getSubjects();
-//        String[] subjects = new String[subjectList.size()];
-//        for(int i=0; i< subjects.length; i++){
-//            subjects[i] = subjectList.get(i);
-//        }
-//        String regex = "\\b("+String.join("|", subjects)+")\\b";
-
-        StringBuilder subjects = new StringBuilder();
-        for(String subject: map.getSubjectsList()){
-            subjects.append(subject).append("|");
-        }
-        subjects.deleteCharAt(subjects.length()-1);
-        String regex = "\\b("+subjects+")\\b";
-
-
-
-        System.out.println(regex);
     }
+
+    @Test
+    void containsEntityTests(){
+        Location cabin = locations.get("cabin");
+        Location cellar = locations.get("cellar");
+        assertEquals("artefacts", cabin.containsEntity("potion"));
+        assertEquals("artefacts", cabin.containsEntity("axe"));
+        assertEquals("artefacts", cabin.containsEntity("coin"));
+        assertEquals("furniture", cabin.containsEntity("trapdoor"));
+        assertNull(cabin.containsEntity("elf"));
+        assertEquals("characters", cellar.containsEntity("elf"));
+    }
+
 }

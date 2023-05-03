@@ -88,7 +88,15 @@ public class Map {
         return triggers;
     }
 
+    public GameAction getGameAction(String trigger, ArrayList<String> subjects){
+        return actionsList.getGameAction(trigger, subjects);
+    }
+
     public ActionsList getActionList(){
         return this.actionsList;
+    }
+
+    public boolean isLocation(String key){
+        return (locations.containsKey(key));
     }
 }

@@ -57,6 +57,10 @@ public class Location {
         artefacts.put(id, item);
     }
 
+    public void addFurniture(String id, Furniture item) {furniture.put(id, item);}
+
+    public void addNPC(String name, NonPlayerCharacter npc) {characters.put(name, npc);}
+
     public String getId(){
         return id;
     }
@@ -93,5 +97,31 @@ public class Location {
 
     public boolean checkPaths(String path){
         return paths.contains(path);
+    }
+
+    public String containsEntity(String key){
+        if(artefacts.containsKey(key)) return "artefacts";
+        else if(furniture.containsKey(key)) return "furniture";
+        else if(characters.containsKey(key)) return "characters";
+        else return null;
+    }
+
+    public GameEntity consumeEntity(String entityType, String key){
+        GameEntity entity = null;
+        switch (entityType){
+            case "artefacts" -> {
+                entity = artefacts.get(key);
+                artefacts.remove(key);
+            }
+            case "furniture" -> {
+                entity = furniture.get(key);
+                furniture.remove(key);
+            }
+            case "characters" -> {
+                entity = characters.get(key);
+                characters.remove(key);
+            }
+        }
+        return entity;
     }
 }

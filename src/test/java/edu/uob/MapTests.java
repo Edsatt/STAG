@@ -2,6 +2,8 @@ package edu.uob;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.io.File;
 import java.nio.file.Paths;
@@ -16,7 +18,7 @@ class MapTests {
     HashMap<String, PlayerCharacter> players;
     @BeforeEach
     void setup() {
-        File entitiesFile = Paths.get("config" + File.separator + "basic-entities.dot").toAbsolutePath().toFile();
+        File entitiesFile = Paths.get("config" + File.separator + "extended-entities.dot").toAbsolutePath().toFile();
         File actionsFile = Paths.get("config" + File.separator + "basic-actions.xml").toAbsolutePath().toFile();
         testServer = new GameServer(entitiesFile, actionsFile);
         map = testServer.getMap();
@@ -56,6 +58,12 @@ class MapTests {
         assertNotEquals(map.getCurrentLocation().getId(), "forest");
         testServer.handleCommand("ed: look");
         assertEquals(map.getCurrentLocation().getId(), "forest");
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"cellar","cabin","forest","clearing","riverbank"})
+    void isLocationTests(String location){
+        assertTrue(map.isLocation(location),location+" should return true");
     }
 }
 
