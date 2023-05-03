@@ -41,6 +41,10 @@ public class ActionCommand extends GameCommand{
         }
     }
 
+    /*
+    what if consumed or produced are null??
+     */
+
     public String consumeEntity(){
         String entityType = entityInLocation(consumedEntity);
         if(entityType!=null){
