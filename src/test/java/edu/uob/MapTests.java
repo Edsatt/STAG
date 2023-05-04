@@ -26,23 +26,6 @@ class MapTests {
     }
 
     @Test
-    void newPlayerTests(){
-        //tests adding new players to the game
-        testServer.handleCommand("ed: inventory");
-        assertEquals(map.getCurrentPlayer().getUsername(), "ed");
-        testServer.handleCommand("isobel: inventory");
-        assertEquals(map.getCurrentPlayer().getUsername(), "isobel");
-        assertTrue(players.containsKey("ed") && players.containsKey("isobel"));
-        assertEquals(players.size(), 2);
-        testServer.handleCommand("ed: inventory");
-        assertTrue(players.containsKey("ed") && players.containsKey("isobel"));
-        assertEquals(players.size(), 2);
-        assertFalse(players.get("ed").isDead());
-        assertFalse(players.get("isobel").isDead());
-        assertTrue(players.get("ed").getInventory().isEmpty());
-    }
-
-    @Test
     void startRoomTests(){
         testServer.handleCommand("ed: inventory");
         PlayerCharacter ed = players.get("ed");

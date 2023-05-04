@@ -76,6 +76,11 @@ public class BasicCommandTests {
     }
 
     @Test
+    void testDropCommand2(){
+        assertTrue(testServer.handleCommand("ed: drop axe").contains("Error"), "axe not in inventory");
+    }
+
+    @Test
     void testGotoCommand(){
         testServer.handleCommand("ed: look");
         String response1 = testServer.handleCommand("ed: goto forest");
@@ -90,5 +95,7 @@ public class BasicCommandTests {
     void testHealthCommand(){
         String response1 = testServer.handleCommand("ed: health");
         assertTrue(response1.contains("3/3"), "health should be full");
+        String response2 = testServer.handleCommand("ed: health axe");
+        assertTrue(response2.contains("Error"), "should result in error");
     }
 }

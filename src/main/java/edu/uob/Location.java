@@ -27,16 +27,19 @@ public class Location {
             case "characters" -> {
                 NonPlayerCharacter npc = new NonPlayerCharacter();
                 npc.setDescription(description);
+                npc.setId(id);
                 characters.put(id, npc);
             }
             case "artefacts" -> {
                 Artefact artefact = new Artefact();
                 artefact.setDescription(description);
+                artefact.setId(id);
                 artefacts.put(id, artefact);
             }
             case "furniture" -> {
                 Furniture furnitureItem = new Furniture();
                 furnitureItem.setDescription(description);
+                furnitureItem.setId(id);
                 furniture.put(id, furnitureItem);
             }
         }

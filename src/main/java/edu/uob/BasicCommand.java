@@ -2,6 +2,7 @@ package edu.uob;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 
 public class BasicCommand extends GameCommand{
     private String subject;
@@ -82,13 +83,15 @@ public class BasicCommand extends GameCommand{
         response.append(currentLocation.getDescription()).append(". You can see:").append(newLine);
 
         for(Artefact item: currentLocation.getArtefacts().values()){
-            response.append(item.getDescription()).append(newLine);
+            response.append(item.getId()).append(": ").append(item.getDescription()).append(newLine);
         }
         for(Furniture item: currentLocation.getFurniture().values()){
-            response.append(item.getDescription()).append(newLine);
+            response.append(item.getId()).append(": ").append(item.getDescription()).append(newLine);
         }
         for(GameCharacter character: currentLocation.getCharacters().values()){
-            response.append(character.getDescription()).append(newLine);
+            if(!Objects.equals(character.getDescription(), player.getUsername())){
+                response.append(character.getId()).append(": ").append(character.getDescription()).append(newLine);
+            }
         }
         response.append("You can access from here: ").append(newLine);
         for(String path: currentLocation.getPaths()){
