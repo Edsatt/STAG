@@ -39,10 +39,6 @@ public class GameAction
         this.narration = narration;
     }
 
-    public List<String> getSubjects() {
-        return subjects;
-    }
-
     public String getConsumed() {
         return consumed;
     }

@@ -9,7 +9,6 @@ public class CommandHandler {
     private final String command;
     private List<String> commandSubjects;
     private final List<String> commandWords;
-    private BasicCommand basicCommand;
     private ActionCommand actionCommand;
 
     public CommandHandler(String input) {
@@ -21,10 +20,7 @@ public class CommandHandler {
         this.map = map;
         this.commandSubjects = new ArrayList<>();
         tokenizeCommand();
-        String response = interpretCommand();
-        if(response == null) {
-            return "Error: Please enter a valid command";
-        }else return response;
+        return interpretCommand();
     }
 
     public void tokenizeCommand(){
@@ -101,7 +97,7 @@ public class CommandHandler {
     }
 
     private String handleBasicCommand(){
-        basicCommand = new BasicCommand((ArrayList<String>) commandWords, map);
+        BasicCommand basicCommand = new BasicCommand((ArrayList<String>) commandWords, map);
         if(!commandSubjects.isEmpty()){
             basicCommand.setSubject(commandSubjects.get(0));
         }
@@ -114,11 +110,11 @@ public class CommandHandler {
         return actionCommand.handleActionCommand();
     }
 
-    public BasicCommand getBasicCommand(){
-        return basicCommand;
-    }
-
     public ActionCommand getActionCommand() {
         return actionCommand;
+    }
+
+    public List<String> getCommandWords() {
+        return commandWords;
     }
 }

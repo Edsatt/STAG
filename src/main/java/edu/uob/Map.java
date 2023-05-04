@@ -76,17 +76,13 @@ public class Map {
             GameEntity item = currentPlayer.takeItemFromInventory(key);
             currentPlayer.getLocation().addEntity("artefacts",key,item);
         }
-        currentLocation.removePlayerCharacter(currentPlayer);
+        currentPlayer.getLocation().removePlayerCharacter(currentPlayer);
         currentPlayer.setLocation(locations.get(startLocationKey));
         currentPlayer.resetHealth();
     }
 
     public PlayerCharacter getCurrentPlayer(){
         return this.currentPlayer;
-    }
-
-    public PlayerCharacter getPlayerByUsername(String username){
-        return players.get(username);
     }
 
     public Location getCurrentLocation(){

@@ -45,7 +45,6 @@ class EntityParserTests {
         assertTrue(cellar.getCharacters().containsKey("elf"));
         assertEquals(cellar.getCharacters().get("elf").getDescription(), "An angry looking Elf");
         assertTrue(cellar.getPaths().contains("cabin"));
-        assertFalse(cellar.isStoreroom());
     }
 
     @Test
@@ -60,7 +59,6 @@ class EntityParserTests {
         assertTrue(cabin.getFurniture().containsKey("trapdoor"));
         assertEquals(cabin.getFurniture().get("trapdoor").getDescription(), "A locked wooden trapdoor in the floor");
         assertTrue(cabin.getPaths().contains("forest"));
-        assertFalse(cabin.isStoreroom());
     }
 
     @Test
@@ -73,7 +71,6 @@ class EntityParserTests {
         assertTrue(forest.getFurniture().containsKey("tree"));
         assertEquals(forest.getFurniture().get("tree").getDescription(), "A tall pine tree");
         assertTrue(forest.getPaths().contains("cabin"));
-        assertFalse(forest.isStoreroom());
     }
 
     @Test

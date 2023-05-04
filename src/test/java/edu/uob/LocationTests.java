@@ -40,5 +40,41 @@ class LocationTests {
         assertEquals(room.getFurniture().get("door").getDescription(), "A locked door");
         assertEquals(room.getFurniture().get("window").getDescription(), "An ornate window");
     }
+
+    @Test
+    void locationHasPathsTests(){
+        room.addPath("cabin");
+        room.addPath("forest");
+        assertTrue(room.hasPath("cabin"), "should have cabin path");
+        assertTrue(room.hasPath("forest"), "should have forest path");
+    }
+
+    @Test
+    void addEntityTests(){
+        GameEntity axe = new Artefact();
+        GameEntity door = new Furniture();
+        GameEntity troll = new NonPlayerCharacter();
+        room.addEntity("artefacts", "axe", axe);
+        room.addEntity("furniture", "door", door);
+        room.addEntity("characters", "troll", troll);
+        assertEquals("artefacts", room.containsEntity("axe"), "axe stored as artefact");
+        assertEquals("furniture", room.containsEntity("door"), "door stored as furniture");
+        assertEquals("characters", room.containsEntity("troll"), "troll stored as character");
+        assertNull(room.containsEntity("book"), "no book entity");
+    }
+
+    @Test
+    void takeEntityTests(){
+        GameEntity axe = new Artefact();
+        GameEntity door = new Furniture();
+        GameEntity troll = new NonPlayerCharacter();
+        room.addEntity("artefacts", "axe", axe);
+        room.addEntity("furniture", "door", door);
+        room.addEntity("characters", "troll", troll);
+        assertNotNull(room.takeEntity("artefacts", "axe"), "returns axe");
+        assertNotNull(room.takeEntity("furniture", "door"), "returns door");
+        assertNotNull(room.takeEntity("characters", "troll"), "returns troll");
+        assertNull(room.takeEntity("characters", "fish"), "no fish entity");
+    }
 }
 

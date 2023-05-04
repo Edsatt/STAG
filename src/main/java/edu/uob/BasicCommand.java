@@ -46,7 +46,7 @@ public class BasicCommand extends GameCommand{
     }
 
     private String handleGetCommand() {
-        Artefact item = currentLocation.getArtefactByKey(subject);
+        Artefact item = (Artefact)currentLocation.takeEntity("artefacts", subject);
         if(subject == null || item==null){
             return ("Error: Get must be followed by an item in the current location");
         }else{
@@ -66,7 +66,7 @@ public class BasicCommand extends GameCommand{
     }
 
     private String handleGotoCommand(){
-        if(currentLocation.checkPaths(subject)){
+        if(currentLocation.hasPath(subject)){
             currentLocation.removePlayerCharacter(player);
             currentLocation = map.getLocation(subject);
             player.setLocation(currentLocation);

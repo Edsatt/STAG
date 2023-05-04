@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import java.io.File;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -36,6 +37,23 @@ public class ActionCommandTests {
     void triggerTests2(){
         testServer.handleCommand("ed: cut chop cut down chop tree");
         actionCommand = testServer.getCommandHandler().getActionCommand();
+        assertTrue(actionCommand.checkTriggers());
+    }
+
+    @Test
+    void triggerTests3(){
+        testServer.handleCommand("ed: cut down tree fight");
+        actionCommand = testServer.getCommandHandler().getActionCommand();
+        assertFalse(actionCommand.checkTriggers());
+    }
+
+    @Test
+    void setSubjectListTest(){
+        testServer.handleCommand("ed: cut tree");
+        ArrayList<String> commandWords = new ArrayList<>(List.of("axe", "tree"));
+        actionCommand = testServer.getCommandHandler().getActionCommand();
+        actionCommand.setSubjectList(commandWords);
+        assertEquals("[axe, tree]",actionCommand.getSubjectList().toString());
     }
 
     @Test
@@ -120,6 +138,57 @@ public class ActionCommandTests {
         testServer.handleCommand("ed: open trapdoor with key");
         actionCommand = testServer.getCommandHandler().getActionCommand();
         actionCommand.produceEntity();
-        assertTrue(map.getCurrentLocation().checkPaths("cellar"));
+        assertTrue(map.getCurrentLocation().hasPath("cellar"));
+    }
+
+    @Test
+    void producedEntityTests2(){
+        testServer.handleCommand("ed: get axe");
+        testServer.handleCommand("ed: goto forest");
+        testServer.handleCommand("ed: cut tree");
+        actionCommand = testServer.getCommandHandler().getActionCommand();
+        actionCommand.produceEntity();
+        assertEquals("log", actionCommand.getProducedEntity(), "produces log");
+    }
+
+    @Test
+    void producedNullTest(){
+        testServer.handleCommand("ed: fight elf");
+        actionCommand = testServer.getCommandHandler().getActionCommand();
+        assertFalse(actionCommand.notHealthOrNull(""));
+    }
+
+    @Test
+    void entityTests(){
+        testServer.handleCommand("ed: goto forest");
+        testServer.handleCommand("ed: get key");
+        testServer.handleCommand("ed: goto cabin");
+        testServer.handleCommand("ed: open trapdoor");
+        actionCommand = testServer.getCommandHandler().getActionCommand();
+        assertTrue(actionCommand.getNarration().contains("door"), "should return narration");
+        assertEquals("key",actionCommand.getConsumedEntity(),"key should be consumed");
+        assertEquals("cellar",actionCommand.getProducedEntity(),"cellar should be produced");
+    }
+
+    @Test
+    void getEntityLocationTests(){
+        testServer.handleCommand("ed: open trapdoor");
+        actionCommand = testServer.getCommandHandler().getActionCommand();
+        assertNull(actionCommand.getEntityLocation("banana"), "no locations contain a banana");
+        assertEquals("riverbank", actionCommand.getEntityLocation("horn").getId(), "horn should be found at riverbank");
+    }
+
+    @Test
+    void handleHealthTests(){
+        testServer.handleCommand("ed: cut tree");
+        actionCommand = testServer.getCommandHandler().getActionCommand();
+        PlayerCharacter ed = actionCommand.player;
+        ed.decreaseHealth();
+        ed.decreaseHealth();
+        actionCommand.handleHealth("produce");
+        assertEquals(2, ed.getHealth(),"ed should have 2 health");
+        ed.decreaseHealth();
+        actionCommand.handleHealth("consume");
+        assertTrue(actionCommand.getNarration().contains("died"),"player should have died");
     }
 }

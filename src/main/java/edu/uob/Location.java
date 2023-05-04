@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 public class Location {
-    private boolean storeroom;
     private final String id;
     private String description;
     private final HashMap<String, GameCharacter> characters;
@@ -17,11 +16,6 @@ public class Location {
         this.artefacts = new HashMap<>();
         this.furniture = new HashMap<>();
         this.paths = new HashSet<>();
-        this.storeroom = false;
-    }
-
-    public void setStoreroom(boolean storeroom) {
-        this.storeroom = storeroom;
     }
 
     public void setDescription(String description){
@@ -72,22 +66,12 @@ public class Location {
         return id;
     }
 
-    public boolean isStoreroom() {
-        return storeroom;
-    }
-
     public String getDescription() {
         return description;
     }
 
     public HashMap<String, Artefact> getArtefacts() {
         return artefacts;
-    }
-
-    public Artefact getArtefactByKey(String key){
-        Artefact item = artefacts.get(key);
-        artefacts.remove(key);
-        return item;
     }
 
     public HashMap<String, GameCharacter> getCharacters() {
@@ -102,7 +86,7 @@ public class Location {
         return paths;
     }
 
-    public boolean checkPaths(String path){
+    public boolean hasPath(String path){
         return paths.contains(path);
     }
 

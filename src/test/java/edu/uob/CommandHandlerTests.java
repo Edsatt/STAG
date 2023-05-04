@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CommandHandlerTests {
 
-    CommandHandler command;
+    CommandHandler commandHandler;
     GameServer testServer;
     Map map;
     @BeforeEach
@@ -23,43 +23,67 @@ public class CommandHandlerTests {
     }
 
     @Test
-    void basicCommandCountTests(){
+    void basicCommandCountTests1(){
         map.selectPlayer("ed");
-        command = new CommandHandler("ed: inventory inv");
-        command.handleCommand(map);
-        assertEquals(command.basicCommandCount(), 2);
-        command = new CommandHandler("ed: Inventory test");
-        command.handleCommand(map);
-        assertEquals(command.basicCommandCount(), 1);
-        command = new CommandHandler("ed: get goto drop");
-        command.handleCommand(map);
-        assertEquals(command.basicCommandCount(), 3);
-        command = new CommandHandler("ed: droop");
-        command.handleCommand(map);
-        assertEquals(command.basicCommandCount(), 0);
+        commandHandler = new CommandHandler("ed: inventory inv");
+        commandHandler.handleCommand(map);
+        assertEquals(2,commandHandler.basicCommandCount());
+        commandHandler = new CommandHandler("ed: Inventory test");
+        commandHandler.handleCommand(map);
+        assertEquals(1,commandHandler.basicCommandCount());
+        commandHandler = new CommandHandler("ed: get goto drop");
+        commandHandler.handleCommand(map);
+        assertEquals(3,commandHandler.basicCommandCount());
+        commandHandler = new CommandHandler("ed: droop");
+        commandHandler.handleCommand(map);
+        assertEquals(0,commandHandler.basicCommandCount());
         assertEquals(testServer.handleCommand("ed: inventory inv"), "Input cannot contain more than one command");
+    }
+
+    @Test
+    void tokenizeCommandTest1(){
+        testServer.handleCommand("ed: show me the inventory");
+        commandHandler = testServer.getCommandHandler();
+        assertEquals(1, commandHandler.getCommandWords().size(), "should only contain inventory");
+        assertTrue(commandHandler.getCommandWords().contains("inventory"), "should contain inventory");
+    }
+
+    @Test
+    void tokenizeCommandTest2(){
+        testServer.handleCommand("ed: get the shiny axe");
+        commandHandler = testServer.getCommandHandler();
+        assertEquals(2, commandHandler.getCommandWords().size(), "should only get and axe");
+        assertTrue(commandHandler.getCommandWords().contains("axe"), "should contain axe");
+    }
+
+    @Test
+    void tokenizeCommandTest3(){
+        testServer.handleCommand("ed: unlock the trapdoor please");
+        commandHandler = testServer.getCommandHandler();
+        assertEquals(2, commandHandler.getCommandWords().size(), "should only contain unlock and trapdoor");
+        assertTrue(commandHandler.getCommandWords().contains("unlock"), "should contain unlock");
     }
 
     @Test
     void subjectCountTests(){
         map.selectPlayer("ed");
-        command = new CommandHandler("ed: get key key");
-        command.handleCommand(map);
-        assertEquals(command.subjectCount(), 2);
-        command = new CommandHandler("ed: get key axe");
-        command.handleCommand(map);
-        assertEquals(command.subjectCount(), 2);
-        command = new CommandHandler("ed: get key");
-        command.handleCommand(map);
-        assertEquals(command.subjectCount(), 1);
-        assertEquals(command.getCommandSubjects().get(0), "key");
-        command = new CommandHandler("ed: inventory");
-        command.handleCommand(map);
-        assertEquals(command.subjectCount(), 0);
-        command = new CommandHandler("ed: get bronze key");
-        command.handleCommand(map);
-        assertEquals(command.getCommandSubjects().get(0), "key");
-        assertEquals(command.subjectCount(), 1);
+        commandHandler = new CommandHandler("ed: get key key");
+        commandHandler.handleCommand(map);
+        assertEquals(commandHandler.subjectCount(), 2);
+        commandHandler = new CommandHandler("ed: get key axe");
+        commandHandler.handleCommand(map);
+        assertEquals(commandHandler.subjectCount(), 2);
+        commandHandler = new CommandHandler("ed: get key");
+        commandHandler.handleCommand(map);
+        assertEquals(commandHandler.subjectCount(), 1);
+        assertEquals(commandHandler.getCommandSubjects().get(0), "key");
+        commandHandler = new CommandHandler("ed: inventory");
+        commandHandler.handleCommand(map);
+        assertEquals(commandHandler.subjectCount(), 0);
+        commandHandler = new CommandHandler("ed: get bronze key");
+        commandHandler.handleCommand(map);
+        assertEquals(commandHandler.getCommandSubjects().get(0), "key");
+        assertEquals(commandHandler.subjectCount(), 1);
         String response = testServer.handleCommand("ed: key axe");
         assertTrue(response.contains("Error"));
     }
