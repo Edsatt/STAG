@@ -19,4 +19,6 @@ To play the game, you will need to run the server first, and then the client ent
 
 As an extension, I added in multiplay functionality and health mechanics to the game.
 
+<img src="/config/gameplay%20screenshot.png"/>
+
 
