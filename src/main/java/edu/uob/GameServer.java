@@ -4,15 +4,12 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 
 /** This class implements the STAG server. */
 public final class GameServer {
 
     private static final char END_OF_TRANSMISSION = 4;
     private final Map map;
-    private EntityParser entityParser;
-    private ActionParser actionParser;
     private CommandHandler commandHandler;
 
     public static void main(String[] args) throws IOException {
@@ -34,8 +31,8 @@ public final class GameServer {
     */
     public GameServer(File entitiesFile, File actionsFile){
         this.map = new Map();
-        this.entityParser = new EntityParser(map, entitiesFile);
-        this.actionParser = new ActionParser(map, actionsFile);
+        EntityParser entityParser = new EntityParser(map, entitiesFile);
+        ActionParser actionParser = new ActionParser(map, actionsFile);
         entityParser.parse();
         entityParser.createLocations();
         actionParser.parse();
@@ -112,25 +109,8 @@ public final class GameServer {
         }
     }
 
-    public static String generateRegex(ArrayList<String> list){
-        StringBuilder sb = new StringBuilder();
-        for(String entity: list){
-            sb.append(entity).append("|");
-        }
-        sb.deleteCharAt(sb.length()-1);
-        return "\\b("+sb+")\\b";
-    }
-
     public Map getMap(){
         return map;
-    }
-
-    public EntityParser getEntityParser() {
-        return entityParser;
-    }
-
-    public ActionParser getActionParser() {
-        return actionParser;
     }
 
     public CommandHandler getCommandHandler() {

@@ -59,7 +59,7 @@ public class EntityParser {
             String entityId = subgraph.getId().getId();
             createEntity(newLocation, entityId, subgraph.getNodes(false));
         }
-        setupStartLocation(locationId, newLocation);
+        setupStartLocation(locationId);
         map.addLocation(locationId, newLocation);
         map.addSubjectKey(locationId);
     }
@@ -95,7 +95,7 @@ public class EntityParser {
         map.getLocation(source).addPath(target);
     }
 
-    public void setupStartLocation(String key, Location location){
+    public void setupStartLocation(String key){
         if(map.getLocations().isEmpty()){
             map.setStartLocationKey(key);
         }

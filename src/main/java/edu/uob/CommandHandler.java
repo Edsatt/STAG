@@ -64,8 +64,8 @@ public class CommandHandler {
     public int subjectCount(){
         int count = 0;
         for(String word: commandWords){
-            if(word.matches(GameServer.generateRegex(map.getSubjectsList()))){
-                count ++;
+            if(map.getSubjectsList().contains(word)){
+                count++;
                 commandSubjects.add(word);
             }
         }
