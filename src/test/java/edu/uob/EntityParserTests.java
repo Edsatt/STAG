@@ -17,7 +17,7 @@ class EntityParserTests {
     public EntityParserTests(){}
     @BeforeEach
     void setup() {
-        File entitiesFile = Paths.get("config" + File.separator + "extended-entities.dot").toAbsolutePath().toFile();
+        File entitiesFile = Paths.get("config" + File.separator + "test2-entities.dot").toAbsolutePath().toFile();
         map = new Map();
         locations = map.getLocations();
         EntityParser entityParser = new EntityParser(map, entitiesFile);
