@@ -153,3 +153,6 @@ typings
 # Optional REPL history
 .node_repl_history
 
+# Specific files
+adventure.mp4
+
