@@ -1,13 +1,13 @@
 package edu.uob;
 
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Objects;
 
 public class BasicCommand extends GameCommand{
     private String subject;
 
-    public BasicCommand(ArrayList<String> commandWords, Map map){
+    public BasicCommand(List<String> commandWords, Map map){
         super(commandWords, map);
     }
 
@@ -88,7 +88,7 @@ public class BasicCommand extends GameCommand{
         for(Furniture item: currentLocation.getFurniture().values()){
             response.append(item.getId()).append(": ").append(item.getDescription()).append(newLine);
         }
-        for(GameCharacter character: currentLocation.getCharacters().values()){
+        for(AbstractGameCharacter character: currentLocation.getCharacters().values()){
             if(!Objects.equals(character.getDescription(), player.getUsername())){
                 response.append(character.getId()).append(": ").append(character.getDescription()).append(newLine);
             }

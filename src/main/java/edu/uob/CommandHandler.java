@@ -72,8 +72,8 @@ public class CommandHandler {
         return count;
     }
 
-    public ArrayList<String> getCommandSubjects(){
-        return (ArrayList<String>) commandSubjects;
+    public List<String> getCommandSubjects(){
+        return commandSubjects;
     }
 
     private String basicCommandCheck() {
@@ -97,7 +97,7 @@ public class CommandHandler {
     }
 
     private String handleBasicCommand(){
-        BasicCommand basicCommand = new BasicCommand((ArrayList<String>) commandWords, map);
+        BasicCommand basicCommand = new BasicCommand(commandWords, map);
         if(!commandSubjects.isEmpty()){
             basicCommand.setSubject(commandSubjects.get(0));
         }
@@ -105,8 +105,8 @@ public class CommandHandler {
     }
 
     private String handleActionCommand(){
-        actionCommand = new ActionCommand((ArrayList<String>)commandWords, map);
-        actionCommand.setSubjectList((ArrayList<String>) commandSubjects);
+        actionCommand = new ActionCommand(commandWords, map);
+        actionCommand.setSubjectList(commandSubjects);
         return actionCommand.handleActionCommand();
     }
 

@@ -7,7 +7,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.io.File;
 import java.nio.file.Paths;
-import java.io.IOException;
 import java.time.Duration;
 
 class ExampleSTAGTests {
@@ -24,7 +23,7 @@ class ExampleSTAGTests {
 
   String sendCommandToServer(String command) {
       // Try to send a command to the server - this call will timeout if it takes too long (in case the server enters an infinite loop)
-      return assertTimeoutPreemptively(Duration.ofMillis(1000), () -> { return server.handleCommand(command);},
+      return assertTimeoutPreemptively(Duration.ofMillis(1000), () -> server.handleCommand(command),
       "Server took too long to respond (probably stuck in an infinite loop)");
   }
 

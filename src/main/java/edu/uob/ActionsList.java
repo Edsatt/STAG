@@ -1,8 +1,8 @@
 package edu.uob;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 
 public class ActionsList {
 
@@ -26,7 +26,7 @@ public class ActionsList {
         return actions;
     }
 
-    public GameAction getGameAction(String trigger, ArrayList<String> subjects){
+    public GameAction getGameAction(String trigger, List<String> subjects){
         HashSet<GameAction> gameActions = actions.get(trigger);
         if(gameActions!=null){
             for(GameAction gameAction: gameActions){

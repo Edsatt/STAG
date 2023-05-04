@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -11,7 +12,9 @@ class ActionsListTests {
 
     ActionsList actionsList;
     GameAction gameAction;
-    ArrayList<String> list;
+    List<String> list;
+
+    public ActionsListTests(){}
     @BeforeEach
     void setup() {
         actionsList = new ActionsList();

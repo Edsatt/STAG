@@ -14,6 +14,8 @@ class MultiplePlayerTests {
     GameServer testServer;
     Map map;
     HashMap<String, PlayerCharacter> players;
+
+    public  MultiplePlayerTests(){}
     @BeforeEach
     void setup() {
         File entitiesFile = Paths.get("config" + File.separator + "extended-entities.dot").toAbsolutePath().toFile();
@@ -45,7 +47,6 @@ class MultiplePlayerTests {
         testServer.handleCommand("ed: inventory");
         testServer.handleCommand("isobel: inventory");
         String response1 = testServer.handleCommand("ed: look");
-        System.out.println(response1);
         assertTrue(response1.contains("isobel"), "one player can see the other");
         assertFalse(response1.contains(" ed "), "player does not see themselves");
     }

@@ -13,6 +13,8 @@ class EntityParserTests {
 
     Map map;
     HashMap<String, Location> locations;
+
+    public EntityParserTests(){}
     @BeforeEach
     void setup() {
         File entitiesFile = Paths.get("config" + File.separator + "extended-entities.dot").toAbsolutePath().toFile();

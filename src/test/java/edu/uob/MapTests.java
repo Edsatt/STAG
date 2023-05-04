@@ -16,6 +16,8 @@ class MapTests {
     GameServer testServer;
     Map map;
     HashMap<String, PlayerCharacter> players;
+
+    public MapTests(){}
     @BeforeEach
     void setup() {
         File entitiesFile = Paths.get("config" + File.separator + "extended-entities.dot").toAbsolutePath().toFile();

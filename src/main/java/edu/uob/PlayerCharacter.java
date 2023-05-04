@@ -2,7 +2,7 @@ package edu.uob;
 
 import java.util.HashMap;
 
-public class PlayerCharacter extends GameCharacter {
+public class PlayerCharacter extends AbstractGameCharacter {
     private final String username;
     private final HashMap<String, Artefact> inventory;
     private Location location;
@@ -10,6 +10,7 @@ public class PlayerCharacter extends GameCharacter {
     private boolean dead;
     
     public PlayerCharacter(String username){
+        super();
         this.username = username;
         setDescription(username);
         this.inventory = new HashMap<>();

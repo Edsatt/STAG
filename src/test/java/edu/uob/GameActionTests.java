@@ -4,12 +4,15 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class GameActionTests {
     GameAction gameAction;
-    ArrayList<String> list;
+    List<String> list;
+
+    public GameActionTests(){}
     @BeforeEach
     void setup() {
         gameAction = new GameAction();
@@ -18,7 +21,7 @@ class GameActionTests {
 
     @Test
     void setSubjectsTests(){
-        gameAction.setSubjects(new String[]{"door", "key"});
+        gameAction.setSubjects("door", "key");
         list.add(0, "door");
         assertTrue(gameAction.checkSubjects(list));
         list.set(0, "key");

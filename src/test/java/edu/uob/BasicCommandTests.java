@@ -5,14 +5,14 @@ import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.nio.file.Paths;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class BasicCommandTests {
+class BasicCommandTests {
     GameServer testServer;
     Map map;
+
+    public BasicCommandTests(){}
     @BeforeEach
     void setup() {
         File entitiesFile = Paths.get("config" + File.separator + "basic-entities.dot").toAbsolutePath().toFile();

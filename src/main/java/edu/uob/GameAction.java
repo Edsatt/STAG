@@ -10,15 +10,13 @@ public class GameAction
     private String consumed;
     private String produced;
     private String narration;
-    public GameAction(){
-    }
 
-    public void setSubjects(String[] subjectArray) {
+    public void setSubjects(String... subjectArray) {
         subjects = new ArrayList<>();
         subjects.addAll(Arrays.stream(subjectArray).toList());
     }
 
-    public boolean checkSubjects(ArrayList<String> querySubjects){
+    public boolean checkSubjects(List<String> querySubjects){
         for(String subject: querySubjects){
             if (!subjects.contains(subject)){
                 return false;

@@ -8,6 +8,8 @@ import static org.junit.jupiter.api.Assertions.*;
 class LocationTests {
 
     Location room;
+
+    public LocationTests(){}
     @BeforeEach
     void setup() {
         room = new Location("Room");

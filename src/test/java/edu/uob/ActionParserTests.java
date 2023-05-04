@@ -16,9 +16,10 @@ class ActionParserTests {
     ActionsList actionsList;
     ActionParser actionParser;
     NodeList actions;
-    ArrayList<String> subjectList;
+    List<String> subjectList;
     Map map;
     GameAction gameAction;
+    public ActionParserTests(){}
 
     //The following tests all use values from an actionFile
     @BeforeEach
@@ -103,7 +104,7 @@ class ActionParserTests {
 
     @Test
     void addTriggersToMapTests(){
-        ArrayList<String> triggers = map.getTriggersList();
+        List<String> triggers = map.getTriggersList();
         assertTrue(triggers.isEmpty(), "triggers should be empty before creating actions");
         actionParser.createActions();
         triggers = map.getTriggersList();

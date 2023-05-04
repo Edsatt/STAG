@@ -1,6 +1,5 @@
 package edu.uob;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class GameCommand {
@@ -10,7 +9,7 @@ public class GameCommand {
     PlayerCharacter player;
     Location currentLocation;
 
-    public GameCommand(ArrayList<String> commandWords, Map map) {
+    public GameCommand(List<String> commandWords, Map map) {
         this.map = map;
         this.player = map.getCurrentPlayer();
         this.commandWords = commandWords;

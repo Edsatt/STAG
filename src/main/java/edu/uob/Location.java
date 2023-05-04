@@ -6,7 +6,7 @@ import java.util.HashSet;
 public class Location {
     private final String id;
     private String description;
-    private final HashMap<String, GameCharacter> characters;
+    private final HashMap<String, AbstractGameCharacter> characters;
     private final HashMap<String, Artefact> artefacts;
     private final HashMap<String, Furniture> furniture;
     private final HashSet<String> paths;
@@ -77,7 +77,7 @@ public class Location {
         return artefacts;
     }
 
-    public HashMap<String, GameCharacter> getCharacters() {
+    public HashMap<String, AbstractGameCharacter> getCharacters() {
         return characters;
     }
 

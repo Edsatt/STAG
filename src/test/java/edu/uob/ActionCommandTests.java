@@ -10,10 +10,11 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class ActionCommandTests {
+class ActionCommandTests {
     GameServer testServer;
     Map map;
     ActionCommand actionCommand;
+    public ActionCommandTests(){}
     @BeforeEach
     void setup() {
         File entitiesFile = Paths.get("config" + File.separator + "extended-entities.dot").toAbsolutePath().toFile();
@@ -61,7 +62,7 @@ public class ActionCommandTests {
         testServer.handleCommand("ed: unlock trapdoor with key");
         actionCommand = testServer.getCommandHandler().getActionCommand();
         assertFalse(actionCommand.isSubjectListEmpty(), "should be false");
-        ArrayList<String> subjectList = actionCommand.getSubjectList();
+        List<String> subjectList = actionCommand.getSubjectList();
         assertEquals(2, subjectList.size(), "should contain 2 subjects");
         assertTrue(subjectList.contains("trapdoor") && subjectList.contains("key"));
         testServer.handleCommand("ed: unlock door with hammer");
@@ -73,50 +74,50 @@ public class ActionCommandTests {
     void checkActionCommandTests(){
         testServer.handleCommand("ed: unlock trapdoor with key");
         actionCommand = testServer.getCommandHandler().getActionCommand();
-        assertTrue(actionCommand.checkActionCommand(), "should be true");
+        assertFalse(actionCommand.actionCommandInvalid(), "should be true");
         testServer.handleCommand("ed: unlock door with hammer");
         actionCommand = testServer.getCommandHandler().getActionCommand();
-        assertFalse(actionCommand.checkActionCommand(), "should be false as invalid subject");
+        assertTrue(actionCommand.actionCommandInvalid(), "should be false as invalid subject");
         testServer.handleCommand("ed: lift trapdoor");
         actionCommand = testServer.getCommandHandler().getActionCommand();
-        assertFalse(actionCommand.checkActionCommand(), "should be false as invalid trigger");
+        assertTrue(actionCommand.actionCommandInvalid(), "should be false as invalid trigger");
     }
 
     @Test
-    void subjectInScopeTest(){
+    void subjectNotInScopeTest(){
         testServer.handleCommand("ed: get coin");
         testServer.handleCommand("ed: open hole with elf");
         actionCommand = testServer.getCommandHandler().getActionCommand();
-        assertFalse(actionCommand.subjectsInScope());
+        assertTrue(actionCommand.subjectsNotInScope());
         testServer.handleCommand("ed: open trapdoor with coin");
         actionCommand = testServer.getCommandHandler().getActionCommand();
-        assertTrue(actionCommand.subjectsInScope());
+        assertFalse(actionCommand.subjectsNotInScope());
         testServer.handleCommand("ed: get potion");
         testServer.handleCommand("ed: drink potion with coin");
         actionCommand = testServer.getCommandHandler().getActionCommand();
-        assertTrue(actionCommand.subjectsInScope());
+        assertFalse(actionCommand.subjectsNotInScope());
         testServer.handleCommand("ed: open trapdoor with axe");
         actionCommand = testServer.getCommandHandler().getActionCommand();
-        assertTrue(actionCommand.subjectsInScope());
+        assertFalse(actionCommand.subjectsNotInScope());
         testServer.handleCommand("ed: open trapdoor with elf");
         actionCommand = testServer.getCommandHandler().getActionCommand();
-        assertFalse(actionCommand.subjectsInScope());
+        assertTrue(actionCommand.subjectsNotInScope());
         testServer.handleCommand("ed: open hole with axe");
         actionCommand = testServer.getCommandHandler().getActionCommand();
-        assertFalse(actionCommand.subjectsInScope());
+        assertTrue(actionCommand.subjectsNotInScope());
     }
 
     @Test
     void findGameActionTests(){
         testServer.handleCommand("ed: unlock trapdoor with key");
         actionCommand = testServer.getCommandHandler().getActionCommand();
-        assertTrue(actionCommand.findGameAction());
+        assertFalse(actionCommand.gameActionNotFound());
         testServer.handleCommand("ed: unlock trapdoor with axe");
         actionCommand = testServer.getCommandHandler().getActionCommand();
-        assertFalse(actionCommand.findGameAction());
+        assertTrue(actionCommand.gameActionNotFound());
         testServer.handleCommand("ed: unlock trapdoor with key and axe");
         actionCommand = testServer.getCommandHandler().getActionCommand();
-        assertFalse(actionCommand.findGameAction());
+        assertTrue(actionCommand.gameActionNotFound());
     }
 
     @Test

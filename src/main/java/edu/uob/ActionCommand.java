@@ -4,15 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ActionCommand extends GameCommand{
-    private final ArrayList<String> triggerList;
-    private ArrayList<String> subjectList;
+    private final List<String> triggerList;
+    private List<String> subjectList;
     private String trigger;
     private final Location storeroom;
     private String producedEntity;
     private String consumedEntity;
     private String narration;
 
-    public ActionCommand(ArrayList<String> commandWords, Map map){
+    public ActionCommand(List<String> commandWords, Map map){
         super(commandWords, map);
         this.triggerList = map.getTriggersList();
         this.storeroom = map.getLocation("storeroom");
@@ -20,19 +20,19 @@ public class ActionCommand extends GameCommand{
 
     public String handleActionCommand(){
         String response;
-        if(!checkActionCommand()) {
+        if(actionCommandInvalid()) {
             response = "Error: Command must contain one trigger phrase and at least one subject";
-        }else if(!subjectsInScope()){
+        }else if(subjectsNotInScope()){
             response = "Error: Subjects must be either in your inventory or your current location";
-        }else if(!findGameAction()){
+        }else if(gameActionNotFound()){
             response = "Error: Ambiguous command not recognised";
         }else response = consumeEntity();
         return response;
     }
 
     //checks that command contains one trigger and at least one subject
-    public boolean checkActionCommand(){
-        return(checkTriggers() && !isSubjectListEmpty());
+    public boolean actionCommandInvalid(){
+        return (!checkTriggers() || isSubjectListEmpty());
     }
 
     public boolean checkTriggers(){
@@ -64,14 +64,14 @@ public class ActionCommand extends GameCommand{
         return subjectList.isEmpty();
     }
 
-    public boolean findGameAction(){
+    public boolean gameActionNotFound(){
         GameAction gameAction = map.getGameAction(trigger, subjectList);
-        if(gameAction ==null) return false;
+        if(gameAction ==null) return true;
         else {
             this.consumedEntity = gameAction.getConsumed();
             this.producedEntity = gameAction.getProduced();
             this.narration = gameAction.getNarration();
-            return true;
+            return false;
         }
     }
 
@@ -114,7 +114,7 @@ public class ActionCommand extends GameCommand{
             default -> null;
         };
         if(entity==null) return false;
-        else if(entity.equals("health")){
+        if(entity.equals("health")){
             handleHealth(entityFate);
             return false;
         }
@@ -142,15 +142,15 @@ public class ActionCommand extends GameCommand{
     }
 
     //Checks that each subject is in either the inventory or location
-    public boolean subjectsInScope(){
+    public boolean subjectsNotInScope(){
         for (String subject: subjectList) {
             if(entityInLocation(subject)==null){
                 if(!entityInInventory(subject)){
-                    return false;
+                    return true;
                 }
             }
         }
-        return true;
+        return false;
     }
 
     public String entityInLocation(String entityKey){
@@ -161,7 +161,7 @@ public class ActionCommand extends GameCommand{
         return player.isItemInventory(entityKey);
     }
 
-    public void setSubjectList(ArrayList<String> subjectList){
+    public void setSubjectList(List<String> subjectList){
         this.subjectList = subjectList;
     }
 
@@ -170,7 +170,7 @@ public class ActionCommand extends GameCommand{
         return trigger;
     }
 
-    public ArrayList<String> getSubjectList(){
+    public List<String> getSubjectList(){
         return subjectList;
     }
 

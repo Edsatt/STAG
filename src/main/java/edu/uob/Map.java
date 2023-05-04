@@ -9,8 +9,8 @@ public class Map {
     private final LinkedHashMap<String, Location> locations;
     private final HashMap<String, PlayerCharacter> players;
     private final String [] commands;
-    private final ArrayList<String> subjects;
-    private final ArrayList<String> triggers;
+    private final List<String> subjects;
+    private final List<String> triggers;
     private final HashSet<List<String>> triggerGroups;
     private final ActionsList actionsList;
 
@@ -36,7 +36,7 @@ public class Map {
         triggers.add(trigger);
     }
 
-    public void addTriggerGroup(String[] triggerGroup){
+    public void addTriggerGroup(String... triggerGroup){
         triggerGroups.add(Arrays.stream(triggerGroup).toList());
     }
 
@@ -60,6 +60,7 @@ public class Map {
         PlayerCharacter player = new PlayerCharacter(username);
         players.put(username, player);
         player.setLocation(locations.get(startLocationKey));
+        player.setId("player");
     }
 
     public void loadLocation(){
@@ -101,11 +102,11 @@ public class Map {
         return locations;
     }
 
-    public ArrayList<String> getSubjectsList() {
+    public List<String> getSubjectsList() {
         return subjects;
     }
 
-    public ArrayList<String> getTriggersList(){
+    public List<String> getTriggersList(){
         return triggers;
     }
 
@@ -113,7 +114,7 @@ public class Map {
         return commands;
     }
 
-    public GameAction getGameAction(String trigger, ArrayList<String> subjects){
+    public GameAction getGameAction(String trigger, List<String> subjects){
         return actionsList.getGameAction(trigger, subjects);
     }
 

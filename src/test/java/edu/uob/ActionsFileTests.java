@@ -1,7 +1,6 @@
 package edu.uob;
 
 import org.junit.jupiter.api.Test;
-import java.util.ArrayList;
 import java.io.IOException;
 import java.io.File;
 import javax.xml.parsers.ParserConfigurationException;
@@ -16,6 +15,8 @@ import static org.junit.jupiter.api.Assertions.fail;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 final class ActionsFileTests {
+
+    public ActionsFileTests(){}
 
   // Test to make sure that the basic actions file is readable
   @Test

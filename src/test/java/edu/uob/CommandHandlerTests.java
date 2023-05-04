@@ -9,11 +9,14 @@ import java.nio.file.Paths;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class CommandHandlerTests {
+class CommandHandlerTests {
 
     CommandHandler commandHandler;
     GameServer testServer;
     Map map;
+
+    public CommandHandlerTests(){}
+
     @BeforeEach
     void setup() {
         File entitiesFile = Paths.get("config" + File.separator + "basic-entities.dot").toAbsolutePath().toFile();

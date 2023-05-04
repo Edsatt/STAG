@@ -11,12 +11,13 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.List;
 
 public class EntityParser {
     Map map;
     private final FileReader reader;
-    ArrayList<Graph> locations;
-    ArrayList<Edge> paths;
+    List<Graph> locations;
+    List<Edge> paths;
 
     public EntityParser(Map map, File entitiesFile){
         this.map = map;
@@ -64,7 +65,7 @@ public class EntityParser {
         map.addSubjectKey(locationId);
     }
 
-    private void createEntity(Location location, String entityId, ArrayList<Node> node){
+    private void createEntity(Location location, String entityId, List<Node> node){
         for (Node value : node) {
             String id = value.getId().getId();
             String description = value.getAttribute("description");
