@@ -75,7 +75,13 @@ class MapTests {
         testServer.handleCommand("ed: goto forest");
         assertTrue(map.getLocation("cabin").getCharacters().containsKey("isobel"), "cabin should still contain player isobel");
         assertEquals(1, map.getLocation("cabin").getCharacters().size(),"cabin should only contain one player");
+    }
 
+    @Test
+    void getEntityLocationTests(){
+        testServer.handleCommand("ed: open trapdoor");
+        assertNull(map.getEntityLocation("banana"), "no locations contain a banana");
+        assertEquals("riverbank", map.getEntityLocation("horn").getId(), "horn should be found at riverbank");
     }
 }
 

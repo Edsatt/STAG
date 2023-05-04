@@ -18,6 +18,10 @@ public class ActionCommand extends GameCommand{
         this.storeroom = map.getLocation("storeroom");
     }
 
+    public void setSubjectList(List<String> subjectList){
+        this.subjectList = subjectList;
+    }
+
     public String handleActionCommand(){
         String response;
         if(actionCommandInvalid()) {
@@ -32,7 +36,7 @@ public class ActionCommand extends GameCommand{
 
     //checks that command contains one trigger and at least one subject
     public boolean actionCommandInvalid(){
-        return (!checkTriggers() || isSubjectListEmpty());
+        return (!checkTriggers() || subjectList.isEmpty());
     }
 
     public boolean checkTriggers(){
@@ -59,11 +63,7 @@ public class ActionCommand extends GameCommand{
         return true;
     }
 
-
-    public boolean isSubjectListEmpty(){
-        return subjectList.isEmpty();
-    }
-
+    //returns false if no action is found matching the trigger and subjects
     public boolean gameActionNotFound(){
         GameAction gameAction = map.getGameAction(trigger, subjectList);
         if(gameAction ==null) return true;
@@ -77,12 +77,12 @@ public class ActionCommand extends GameCommand{
 
     public String consumeEntity(){
         if(notHealthOrNull("consume")){
-            String entityType = entityInLocation(consumedEntity);
+            String entityType = currentLocation.containsEntity(consumedEntity);
             if(entityType!=null){
                 GameEntity entity = currentLocation.takeEntity(entityType, consumedEntity);
                 storeroom.addEntity(entityType,consumedEntity,entity);
 
-            }else if(entityInInventory(consumedEntity)){
+            }else if(player.isItemInInventory(consumedEntity)){
                 Artefact item = player.takeItemFromInventory(consumedEntity);
                 storeroom.addEntity("artefacts", consumedEntity, item);
 
@@ -98,7 +98,7 @@ public class ActionCommand extends GameCommand{
             if(map.isLocation(producedEntity)){
                 currentLocation.addPath(producedEntity);
             }else{
-                Location entityLocation = getEntityLocation(producedEntity);
+                Location entityLocation = map.getEntityLocation(producedEntity);
                 String entityType = entityLocation.containsEntity(producedEntity);
                 GameEntity entity = entityLocation.takeEntity(entityType, producedEntity);
                 currentLocation.addEntity(entityType, producedEntity, entity);
@@ -107,6 +107,7 @@ public class ActionCommand extends GameCommand{
         return narration;
     }
 
+    //used to check if either the produced or consumed entity are null or health
     public boolean notHealthOrNull(String entityFate){
         String entity = switch (entityFate){
             case "consume" -> consumedEntity;
@@ -120,6 +121,8 @@ public class ActionCommand extends GameCommand{
         }
         return true;
     }
+
+    //if consumed or produced entity is health then this is dealt with
     public void handleHealth(String effect){
         switch(effect){
             case "consume" -> player.decreaseHealth();
@@ -131,38 +134,14 @@ public class ActionCommand extends GameCommand{
         }
     }
 
-    public Location getEntityLocation(String entityKey){
-        Location entityLocation = null;
-        for(Location location: map.getLocations().values()){
-            if(location.containsEntity(entityKey)!=null){
-                entityLocation = location;
-            }
-        }
-        return entityLocation;
-    }
-
     //Checks that each subject is in either the inventory or location
     public boolean subjectsNotInScope(){
         for (String subject: subjectList) {
-            if(entityInLocation(subject)==null){
-                if(!entityInInventory(subject)){
-                    return true;
-                }
+            if(currentLocation.containsEntity(subject)==null && !player.isItemInInventory(subject)){
+                return true;
             }
         }
         return false;
-    }
-
-    public String entityInLocation(String entityKey){
-        return currentLocation.containsEntity(entityKey);
-    }
-
-    public boolean entityInInventory(String entityKey){
-        return player.isItemInventory(entityKey);
-    }
-
-    public void setSubjectList(List<String> subjectList){
-        this.subjectList = subjectList;
     }
 
     //for testing

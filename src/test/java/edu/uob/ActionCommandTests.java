@@ -61,13 +61,13 @@ class ActionCommandTests {
     void subjectListTests(){
         testServer.handleCommand("ed: unlock trapdoor with key");
         actionCommand = testServer.getCommandHandler().getActionCommand();
-        assertFalse(actionCommand.isSubjectListEmpty(), "should be false");
+        assertFalse(actionCommand.actionCommandInvalid(), "should be false");
         List<String> subjectList = actionCommand.getSubjectList();
         assertEquals(2, subjectList.size(), "should contain 2 subjects");
         assertTrue(subjectList.contains("trapdoor") && subjectList.contains("key"));
         testServer.handleCommand("ed: unlock door with hammer");
         actionCommand = testServer.getCommandHandler().getActionCommand();
-        assertTrue(actionCommand.isSubjectListEmpty(), "should be true as no subjects");
+        assertTrue(actionCommand.actionCommandInvalid(), "should be true as no subjects");
     }
 
     @Test
@@ -169,14 +169,6 @@ class ActionCommandTests {
         assertTrue(actionCommand.getNarration().contains("door"), "should return narration");
         assertEquals("key",actionCommand.getConsumedEntity(),"key should be consumed");
         assertEquals("cellar",actionCommand.getProducedEntity(),"cellar should be produced");
-    }
-
-    @Test
-    void getEntityLocationTests(){
-        testServer.handleCommand("ed: open trapdoor");
-        actionCommand = testServer.getCommandHandler().getActionCommand();
-        assertNull(actionCommand.getEntityLocation("banana"), "no locations contain a banana");
-        assertEquals("riverbank", actionCommand.getEntityLocation("horn").getId(), "horn should be found at riverbank");
     }
 
     @Test

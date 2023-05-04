@@ -125,4 +125,14 @@ public class Map {
     public boolean isLocation(String key){
         return (locations.containsKey(key));
     }
+
+    public Location getEntityLocation(String entityKey){
+        Location entityLocation = null;
+        for(Location location: locations.values()){
+            if(location.containsEntity(entityKey)!=null){
+                entityLocation = location;
+            }
+        }
+        return entityLocation;
+    }
 }

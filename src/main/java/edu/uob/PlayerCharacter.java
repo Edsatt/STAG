@@ -59,7 +59,7 @@ public class PlayerCharacter extends AbstractGameCharacter {
         return this.dead;
     }
 
-    public boolean isItemInventory(String id){
+    public boolean isItemInInventory(String id){
         return(inventory.containsKey(id));
     }
 
