@@ -55,8 +55,12 @@ public final class GameServer {
             commandHandler = new CommandHandler(command);
             return commandHandler.handleCommand(map);
         }else{
-            return "Please enter a valid command";
+            return "Error: Please enter a valid username and command";
         }
+    }
+
+    public boolean usernameCheck(String username){
+        return username.matches("^[a-zA-Z-' ]+$");
     }
 
     //  === Methods below are there to facilitate server related operations. ===
